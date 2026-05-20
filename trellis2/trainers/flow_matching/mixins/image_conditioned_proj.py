@@ -67,7 +67,7 @@ def project_points_to_image_batch(
     points_homogeneous = torch.cat([points_3d_batch, ones], dim=-1)  # [B, N, 4]
     
     # Compute world to camera transformation matrix
-    world_to_camera = torch.linalg.inv(transform_matrix)  # [B, 4, 4]
+    world_to_camera = torch.linalg.inv(transform_matrix.float()).to(transform_matrix.dtype)  # linalg.inv requires fp32+
     
     # Batch transform to camera coordinate system: [B, N, 4] @ [B, 4, 4]^T -> [B, N, 3]
     points_camera = torch.bmm(points_homogeneous, world_to_camera.transpose(-2, -1))[..., :3]  # [B, N, 3]
@@ -409,7 +409,7 @@ class DinoV3ProjFeatureExtractor(nn.Module):
         # (current behavior, default). >1 enables a streaming wrapper that tiles NAF and
         # the projection together, capping the transient HR-feature-map peak. Set transiently
         # by the pipeline (see Pixal3DImageTo3DPipeline.get_proj_cond_shape).
-        self.naf_tile_factor: int = 4
+        self.naf_tile_factor: int = 1
 
         # proj_channels: the output dimension of proj features
         # Without NAF: embed_dim (e.g. 1024)

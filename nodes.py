@@ -61,6 +61,12 @@ class AnyType(str):
 
 any = AnyType("*")
 
+def inpaint_channel(channel, mask_inv, radius=1, mode = cv2.INPAINT_TELEA):
+    out = cv2.inpaint(channel, mask_inv, radius, mode)
+    if out.ndim == 2:
+        out = out[..., None]
+    return out
+
 def rotate_triton_cache():
     """
     Creates a new cache directory and attempts to clean up old ones.
@@ -1278,9 +1284,9 @@ class Trellis2UnWrapAndRasterizer:
         # Inpainting: fill gaps (dilation) to prevent black seams at UV boundaries
         mask_inv = (~mask).astype(np.uint8)
         base_color = cv2.inpaint(base_color, mask_inv, 3, inpainting)
-        metallic = cv2.inpaint(metallic, mask_inv, 1, inpainting)[..., None]
-        roughness = cv2.inpaint(roughness, mask_inv, 1, inpainting)[..., None]
-        alpha = cv2.inpaint(alpha, mask_inv, 1, inpainting)[..., None]
+        metallic = inpaint_channel(metallic, mask_inv, 1, inpainting)
+        roughness = inpaint_channel(roughness, mask_inv, 1, inpainting)
+        alpha = inpaint_channel(alpha, mask_inv, 1, inpainting)
         
         # Create PBR material
         # Standard PBR packs Metallic and Roughness into Blue and Green channels
@@ -1435,31 +1441,53 @@ class Trellis2MeshWithVoxelAdvancedGenerator:
         if generate_texture_slat:
             num_steps = 5
         else:
-            num_steps = 4
-
-        pbar = ProgressBar(num_steps)
+            num_steps = 4        
         
-        mesh = pipeline.run(image=image_in, 
-                            seed=seed, 
-                            pipeline_type=pipeline_type, 
-                            sparse_structure_sampler_params = sparse_structure_sampler_params, 
-                            shape_slat_sampler_params = shape_slat_sampler_params, 
-                            tex_slat_sampler_params = tex_slat_sampler_params, 
-                            max_num_tokens = max_num_tokens, 
-                            sparse_structure_resolution = sparse_structure_resolution, 
-                            max_views = max_views, 
-                            generate_texture_slat=generate_texture_slat, 
-                            use_tiled=use_tiled_decoder, 
-                            pbar=pbar, 
-                            sampler=sampler,
-                            fill_holes = fill_holes,
-                            hole_iterations = hole_iterations,
-                            verbose = verbose,
-                            dino_lock = dino_lock,
-                            dino_substeps = dino_substeps,
-                            hole_fill_algorithm=hole_fill_algorithm,
-                            dino_foundation_cap=dino_foundation_cap,
-                            keep_only_shell=keep_only_shell)[0]         
+        if pipeline.isPixal3D:
+            pipeline.load_moge_model()
+            
+            if isinstance(images, (list, tuple)):
+                image = images[0]
+            else:
+                image = images
+                
+            camera_params = pipeline.get_moge_camera_config(image)
+
+            if not pipeline.keep_models_loaded: 
+                pipeline.unload_moge_model()
+            
+            mesh = pipeline.run_pixal3d(image=image_in, 
+                                seed=seed, 
+                                pipeline_type=pipeline_type, 
+                                sparse_structure_sampler_params = sparse_structure_sampler_params, 
+                                shape_slat_sampler_params = shape_slat_sampler_params, 
+                                tex_slat_sampler_params = tex_slat_sampler_params, 
+                                max_num_tokens = max_num_tokens,
+                                generate_texture_slat=generate_texture_slat,
+                                camera_params=camera_params)[0]             
+        else:
+            pbar = ProgressBar(num_steps)
+            mesh = pipeline.run(image=image_in, 
+                                seed=seed, 
+                                pipeline_type=pipeline_type, 
+                                sparse_structure_sampler_params = sparse_structure_sampler_params, 
+                                shape_slat_sampler_params = shape_slat_sampler_params, 
+                                tex_slat_sampler_params = tex_slat_sampler_params, 
+                                max_num_tokens = max_num_tokens, 
+                                sparse_structure_resolution = sparse_structure_resolution, 
+                                max_views = max_views, 
+                                generate_texture_slat=generate_texture_slat, 
+                                use_tiled=use_tiled_decoder, 
+                                pbar=pbar, 
+                                sampler=sampler,
+                                fill_holes = fill_holes,
+                                hole_iterations = hole_iterations,
+                                verbose = verbose,
+                                dino_lock = dino_lock,
+                                dino_substeps = dino_substeps,
+                                hole_fill_algorithm=hole_fill_algorithm,
+                                dino_foundation_cap=dino_foundation_cap,
+                                keep_only_shell=keep_only_shell)[0]         
         
         vertices = mesh.vertices.cuda()
         faces = mesh.faces.cuda()                
@@ -1663,6 +1691,7 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
                 "bvh": ("BVH",),
                 "remove_inner_faces": ("BOOLEAN",{"default":True}),
                 "inpainting": (["telea","ns"],{"default":"telea"}),
+                "reorient_vertices":(["None","90 degrees","-90 degrees"],{"default":"90 degrees"}),
             }
         }
 
@@ -1672,7 +1701,7 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
     CATEGORY = "Trellis2Wrapper"
     OUTPUT_NODE = True
 
-    def process(self, mesh, mesh_cluster_threshold_cone_half_angle_rad, mesh_cluster_refine_iterations, mesh_cluster_global_iterations, mesh_cluster_smooth_strength, texture_size, remesh, remesh_band, remesh_project, target_face_num, simplify_method, fill_holes, texture_alpha_mode, dual_contouring_resolution, double_side_material, remove_floaters, bake_on_vertices,use_custom_normals,bvh,remove_inner_faces,inpainting):
+    def process(self, mesh, mesh_cluster_threshold_cone_half_angle_rad, mesh_cluster_refine_iterations, mesh_cluster_global_iterations, mesh_cluster_smooth_strength, texture_size, remesh, remesh_band, remesh_project, target_face_num, simplify_method, fill_holes, texture_alpha_mode, dual_contouring_resolution, double_side_material, remove_floaters, bake_on_vertices,use_custom_normals,bvh,remove_inner_faces,inpainting,reorient_vertices):
         pbar = ProgressBar(5 if not bake_on_vertices else 4)
         mesh_copy = copy.deepcopy(mesh)
         
@@ -1707,10 +1736,7 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
                 grid_size = np.array(grid_size)
             if isinstance(grid_size, np.ndarray):
                 grid_size = torch.tensor(grid_size, dtype=torch.int32, device=coords.device)
-            voxel_size = (aabb[1] - aabb[0]) / grid_size
-        
-        if remove_floaters:
-            mesh_copy = remove_floater(mesh_copy)
+            voxel_size = (aabb[1] - aabb[0]) / grid_size        
             
         vertices = mesh_copy.vertices
         faces = mesh_copy.faces
@@ -1769,18 +1795,21 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
             else:
                 resolution = int(dual_contouring_resolution)
             
+            scale = (resolution + 3 * remesh_band) / resolution * scale
+            print(f"Calculated scale: {scale}")
+            
             print('Performing Dual Contouring ...')
             # Perform Dual Contouring remeshing (rebuilds topology)
             cumesh.init(*CuMesh.remeshing.remesh_narrow_band_dc_quad(
                 vertices, faces,
                 center = center,
-                scale = scale * 1.1, # old calculation : (resolution + 3 * remesh_band) / resolution * scale,
+                scale = scale,
                 resolution = resolution,
                 band = remesh_band,
                 project_back = remesh_project, # Snaps vertices back to original surface
                 verbose = True,
                 remove_inner_faces = remove_inner_faces,
-                #bvh = bvh,
+                bvh = bvh,
             ))
             
             new_vertices, new_faces = cumesh.read()
@@ -1910,8 +1939,12 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
             normals_np = out_normals.cpu().numpy()
             
             # Swap Y and Z axes, invert Y (common conversion for GLB compatibility)
-            vertices_np[:, 1], vertices_np[:, 2] = vertices_np[:, 2].copy(), -vertices_np[:, 1].copy()
-            normals_np[:, 1], normals_np[:, 2] = normals_np[:, 2].copy(), -normals_np[:, 1].copy()
+            if reorient_vertices == '90 degrees':
+                vertices_np[:, 1], vertices_np[:, 2] = vertices_np[:, 2].copy(), -vertices_np[:, 1].copy()
+                normals_np[:, 1], normals_np[:, 2] = normals_np[:, 2].copy(), -normals_np[:, 1].copy()
+            elif reorient_vertices == '-90 degrees':                
+                vertices_np[:, 1], vertices_np[:, 2] = -vertices_np[:, 2].copy(), vertices_np[:, 1].copy()
+                normals_np[:, 1], normals_np[:, 2] = -normals_np[:, 2].copy(), normals_np[:, 1].copy()                
             
             # Create mesh with vertex colors using ColorVisuals
             if use_custom_normals:
@@ -2021,9 +2054,9 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
         
         mask_inv = (~mask).astype(np.uint8)
         base_color = cv2.inpaint(base_color, mask_inv, 3, inpainting)
-        metallic = cv2.inpaint(metallic, mask_inv, 1, inpainting)[..., None]
-        roughness = cv2.inpaint(roughness, mask_inv, 1, inpainting)[..., None]
-        alpha = cv2.inpaint(alpha, mask_inv, 1, inpainting)[..., None]
+        metallic = inpaint_channel(metallic, mask_inv, 1, inpainting)
+        roughness = inpaint_channel(roughness, mask_inv, 1, inpainting)
+        alpha = inpaint_channel(alpha, mask_inv, 1, inpainting)
         
         # Create PBR material
         # Standard PBR packs Metallic and Roughness into Blue and Green channels
@@ -2045,8 +2078,13 @@ class Trellis2PostProcessAndUnWrapAndRasterizer:
         normals_np = out_normals.cpu().numpy()
         
         # Swap Y and Z axes, invert Y (common conversion for GLB compatibility)
-        vertices_np[:, 1], vertices_np[:, 2] = vertices_np[:, 2].copy(), -vertices_np[:, 1].copy()
-        normals_np[:, 1], normals_np[:, 2] = normals_np[:, 2].copy(), -normals_np[:, 1].copy()
+        if reorient_vertices == '90 degrees':
+            vertices_np[:, 1], vertices_np[:, 2] = vertices_np[:, 2].copy(), -vertices_np[:, 1].copy()
+            normals_np[:, 1], normals_np[:, 2] = normals_np[:, 2].copy(), -normals_np[:, 1].copy()            
+        elif reorient_vertices == '-90 degrees':                
+            vertices_np[:, 1], vertices_np[:, 2] = -vertices_np[:, 2].copy(), vertices_np[:, 1].copy()
+            normals_np[:, 1], normals_np[:, 2] = -normals_np[:, 2].copy(), normals_np[:, 1].copy()          
+        
         uvs_np[:, 1] = 1 - uvs_np[:, 1] # Flip UV V-coordinate
         
         if use_custom_normals:
@@ -5156,7 +5194,7 @@ class Trellis2SaveImage:
             "required": {
                 "images": ("IMAGE", {"tooltip": "The images to save."}),
                 "filename_prefix": ("STRING", {"default": "ComfyUI", "tooltip": "The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes."}),
-                "compress_level": ("INT",{"default":4,"min":1,"max":9,"step":1}),
+                "compress_level": ("INT",{"default":1,"min":1,"max":9,"step":1}),
             },
             "hidden": {
                 "prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"

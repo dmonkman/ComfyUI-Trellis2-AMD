@@ -19,7 +19,7 @@ def distance_from_fov(camera_angle_x, grid_point, target_point, mesh_scale, imag
     distance_x = f_pixels * xw / x_ndc - yw
     return {"distance_from_x": float(distance_x), "f_pixels": float(f_pixels)}
 
-def get_camera_params_wild_moge(pil_image, moge_model, device="cuda", mesh_scale=1.0, extend_pixel=0, image_resolution=1024):
+def get_camera_params_wild_moge(pil_image, moge_model, device="cuda", mesh_scale=1.0, extend_pixel=0, image_resolution=512):
     #pil_image = Image.open(image_path).convert("RGB")
     width, height = pil_image.size
     image_np = np.array(pil_image).astype(np.float32) / 255.0
