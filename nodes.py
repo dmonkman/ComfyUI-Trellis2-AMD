@@ -339,6 +339,7 @@ class Trellis2LoadModel:
                 "conv_backend": (["spconv","torchsparse","flex_gemm"],{"default":"flex_gemm"}),
                 "sparse_backend": (["xformers","flash_attn"],{"default":"flash_attn"}),
                 "use_reconviagen": ("BOOLEAN",{"default":False}),
+                #"naf_chunk_size":(["None","144","208","272","336","400","464","528","592","656","720","784","848","912","976","1024"],{"default":"None"}),
             }
         }
 
@@ -493,6 +494,11 @@ class Trellis2LoadModel:
         
         pipeline = Trellis2ImageTo3DPipeline.from_pretrained(model_path, keep_models_loaded = keep_models_loaded, use_fp8=use_fp8, use_reconviagen=use_reconviagen, isPixal3D = isPixal3D)
         pipeline.low_vram = low_vram
+        
+        # if naf_chunk_size == "None":
+            # pipeline.naf_chunk_size = None
+        # else:
+            # pipeline.naf_chunk_size = int(naf_chunk_size)
         
         if device=="cuda":
             if low_vram:
@@ -6700,7 +6706,49 @@ class Trellis2MoGeCameraConfig:
     def process(self, camera_angle_x, distance, mesh_scale):
         cam_config = {'camera_angle_x':camera_angle_x,'distance':distance,'mesh_scale':mesh_scale}
         
-        return (cam_config,)     
+        return (cam_config,)   
+
+class Trellis2FovMoGeCameraConfig:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "fov": ("FLOAT",{"default":0.200,"min":0.001,"max":359.999, "step":0.001}),
+                "unit": (["deg","rad"],{"default":"rad"}),
+                "extend_pixel": ("INT",{"default":0,"min":0,"max":1000}),
+                "mesh_scale": ("FLOAT",{"default":1.0,"min":0.1,"max":9.9,"step":0.1}),
+            },
+        }
+
+    RETURN_TYPES = ("MOGE_CAM_CONFIG",)
+    RETURN_NAMES = ("moge_camera_config",)
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+    OUTPUT_NODE = True
+
+    def process(self, fov, unit, extend_pixel, mesh_scale):
+        import math
+        from .trellis2.utils.camera import distance_from_fov
+        
+        image_resolution = 512
+        
+        if unit == "rad":
+            camera_angle_x = fov
+            fov_deg = math.degrees(fov)
+        else:
+            camera_angle_x = math.radians(fov)
+            fov_deg = fov
+            
+        grid_point = torch.tensor([-1.0, 0.0, 0.0])
+        distance = distance_from_fov(
+            camera_angle_x, grid_point,
+            torch.tensor([0 - extend_pixel, image_resolution - 1 + extend_pixel]),
+            mesh_scale, image_resolution
+        )["distance_from_x"]
+        cam_config = {'camera_angle_x': camera_angle_x, 'distance': distance, 'mesh_scale': mesh_scale}
+        print(cam_config)
+        
+        return (cam_config,)         
         
 NODE_CLASS_MAPPINGS = {
     "Trellis2LoadModel": Trellis2LoadModel,
@@ -6768,6 +6816,7 @@ NODE_CLASS_MAPPINGS = {
     "Trellis2ShapeCascadeMultiViewGenerator": Trellis2ShapeCascadeMultiViewGenerator,
     "Trellis2TexSlatMultiViewGenerator": Trellis2TexSlatMultiViewGenerator,
     "Trellis2MoGeCameraConfig": Trellis2MoGeCameraConfig,
+    "Trellis2FovMoGeCameraConfig": Trellis2FovMoGeCameraConfig,
     }
     
 
@@ -6837,4 +6886,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Trellis2ShapeCascadeMultiViewGenerator": "Trellis2 - Shape Cascade MultiView Generator",
     "Trellis2TexSlatMultiViewGenerator": "Trellis2 - Tex Slat MultiView Generator",
     "Trellis2MoGeCameraConfig": "Trellis2 - MoGe Camera Config",
+    "Trellis2FovMoGeCameraConfig": "Trellis2 - Fov MoGe Camera Config"
     }

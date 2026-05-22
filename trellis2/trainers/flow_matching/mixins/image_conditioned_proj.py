@@ -418,14 +418,34 @@ class DinoV3ProjFeatureExtractor(nn.Module):
         
         # NOTE: proj_linear removed — now lives in each denoiser block's ProjectAttention
     
+    def _cached_naf_repo(self) -> Optional[str]:
+        import torch.hub
+
+        hub_dir = torch.hub.get_dir()
+        if not os.path.isdir(hub_dir):
+            return None
+        for name in os.listdir(hub_dir):
+            repo_dir = os.path.join(hub_dir, name)
+            if name.startswith("valeoai_NAF_") and os.path.exists(os.path.join(repo_dir, "hubconf.py")):
+                return repo_dir
+        return None    
+    
     def _load_naf(self):
         """Lazy-load pretrained NAF model."""
         if self.naf_model is None:
             import torch.hub
-            device = next(self.model.parameters()).device
-            self.naf_model = torch.hub.load(
-                "valeoai/NAF", "naf", pretrained=True, device=device, trust_repo=True
-            )
+            device = next(self.model.parameters()).device            
+            cached_repo = self._cached_naf_repo()
+            
+            if cached_repo is not None:
+                self.naf_model = torch.hub.load(
+                    cached_repo, "naf", pretrained=True, device=device, source="local", trust_repo=True
+                )
+            elif self.naf_download_if_missing:
+                self.naf_model = torch.hub.load(
+                    "valeoai/NAF", "naf", pretrained=True, device=device, trust_repo=True
+                )            
+
             self.naf_model.eval()
             self.naf_model.requires_grad_(False)
         
