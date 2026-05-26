@@ -441,7 +441,7 @@ class DinoV3ProjFeatureExtractor(nn.Module):
                 self.naf_model = torch.hub.load(
                     cached_repo, "naf", pretrained=True, device=device, source="local", trust_repo=True
                 )
-            elif self.naf_download_if_missing:
+            else:
                 self.naf_model = torch.hub.load(
                     "valeoai/NAF", "naf", pretrained=True, device=device, trust_repo=True
                 )            
