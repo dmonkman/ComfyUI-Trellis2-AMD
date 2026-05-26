@@ -61,6 +61,13 @@ class AnyType(str):
 
 any = AnyType("*")
 
+class ViewConfig:
+    def __init__(self,image,azimuth,elevation,prompt):
+        self.image = image
+        self.azimuth = azimuth
+        self.elevation = elevation
+        self.prompt = prompt
+
 def inpaint_channel(channel, mask_inv, radius=1, mode = cv2.INPAINT_TELEA):
     out = cv2.inpaint(channel, mask_inv, radius, mode)
     if out.ndim == 2:
@@ -2311,7 +2318,7 @@ class Trellis2ReconstructMeshWithQuad:
         mesh_copy.vertices = vertices.to(mesh_copy.device)
         mesh_copy.faces = faces.to(mesh_copy.device) 
                 
-        return (mesh_copy,)         
+        return (mesh_copy,)       
         
 class Trellis2MeshTexturing:
     @classmethod
@@ -5005,8 +5012,8 @@ class Trellis2RenderMultiView:
         return {
             "required": {
                 "trimesh": ("TRIMESH",),
-                "render_size": ("INT", {"default": 4096, "min": 512, "max": 8192}),
-                "ortho_scale": ("FLOAT", {"default": 1.1, "min": 0.05, "max": 10.0, "step": 0.01}),
+                "render_size": ("INT", {"default": 1024, "min": 512, "max": 8192}),
+                "ortho_scale": ("FLOAT", {"default": 1.2, "min": 0.05, "max": 10.0, "step": 0.01}),
                 "blender_exec_path": ("STRING",),
                 "azimuths": ("STRING",{"default":"0,90,180,270,0,0"}),
                 "elevations": ("STRING",{"default":"0,0,0,0,90,-90"}),
@@ -6748,7 +6755,277 @@ class Trellis2FovMoGeCameraConfig:
         cam_config = {'camera_angle_x': camera_angle_x, 'distance': distance, 'mesh_scale': mesh_scale}
         print(cam_config)
         
-        return (cam_config,)         
+        return (cam_config,)       
+
+class Trellis2ImagesToViewConfigs:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "images": ("IMAGE",),
+                "azimuths": ("STRING",),
+                "elevations": ("STRING",),
+            },
+        }
+
+    RETURN_TYPES = ("TRELLIS2_VIEWCONFIGS",)
+    RETURN_NAMES = ("view_config_list",)
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+    OUTPUT_NODE = True
+
+    def process(self, images, azimuths, elevations,):
+        custom_az_list = self._parse_angles(azimuths)
+        custom_el_list = self._parse_angles(elevations)     
+        
+        view_configs = []
+        for i,a,e in zip(images,custom_az_list,custom_el_list):                       
+            if a<=30:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the front view"
+                    elif e<60:
+                        prompt = "Generate the top-front-view"
+                    else:
+                        prompt = "Generate the top view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the front view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-front-view"
+                    else:
+                        prompt = "Generate the bottom view"                    
+            elif a<=75:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the front-left view"
+                    elif e<60:
+                        prompt = "Generate the top-front-left view"
+                    else:
+                        prompt = "Generate the top-left view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the front-left view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-front-left view"
+                    else:
+                        prompt = "Generate the bottom-left view"                    
+            elif a<=120:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the left side view"
+                    else:
+                        prompt = "Generate the top-left side view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the left side view"
+                    else:
+                        prompt = "Generate the bottom-left side view"                    
+            elif a<=165:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the back-left view"
+                    elif e<60:
+                        prompt = "Generate the top-back-left view"
+                    else:
+                        prompt = "Generate the top-left view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the back-left view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-back-left view"
+                    else:
+                        prompt = "Generate the bottom-left view"
+                    
+            elif a<=210:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the back view"
+                    elif e<60:
+                        prompt = "Generate the top-back view"
+                    else:
+                        prompt = "Generate the top view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the back view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-back view"
+                    else:
+                        prompt = "Generate the bottom view"                    
+            elif a<=255:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the back-right view"
+                    elif e<60:
+                        prompt = "Generate the top-back-right view"
+                    else:
+                        prompt = "Generate the top-right view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the back-right view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-back-right view"
+                    else:
+                        prompt = "Generate the bottom-right view"                    
+            elif a<=300:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the right side view"
+                    else:
+                        prompt = "Generate the top-right side view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the right side view"
+                    else:
+                        prompt = "Generate the bottom-right side view"
+                    
+            else:
+                if e>=0:
+                    if e<20:
+                        prompt = "Generate the front-right view"
+                    elif e<60:
+                        prompt = "Generate the top-front-right view"
+                    else:
+                        prompt = "Generate the top-right view"
+                else:
+                    if e>-20:
+                        prompt = "Generate the front-right view"
+                    elif e>-60:
+                        prompt = "Generate the bottom-front-right view"
+                    else:
+                        prompt = "Generate the bottom-right view"                
+            
+            img_tensor = i.unsqueeze(0)
+            
+            view_config = ViewConfig(img_tensor,a,e,prompt)
+            view_configs.append(view_config)
+            
+            print(f"azimuth {a} - elevation {e} : {prompt}")
+            
+        return (view_configs,) 
+
+    def _parse_angles(self, angle_string):
+        """Parse comma-separated angles into list of floats."""
+        if not angle_string or angle_string.strip() == "":
+            return []
+        try:
+            return [float(x.strip()) for x in angle_string.split(",") if x.strip()]
+        except ValueError:
+            print(f"[MultiView] Warning: Could not parse angles: {angle_string}")
+            return []        
+
+class Trellis2ViewConfigsToList:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "view_config_list": ("TRELLIS2_VIEWCONFIGS",),
+            },
+        }
+
+    RETURN_TYPES = ("TRELLIS2_VIEWCONFIG",)
+    RETURN_NAMES = ("view_config",)
+    OUTPUT_IS_LIST = (True,)
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+    OUTPUT_NODE = True
+
+    def process(self, view_config_list,):
+        return (view_config_list,)    
+
+class Trellis2ExtractViewConfigDetails:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "view_config": ("TRELLIS2_VIEWCONFIG",),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE","FLOAT","FLOAT","STRING",)
+    RETURN_NAMES = ("image","azimuth","elevation","prompt",)
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+    OUTPUT_NODE = True
+
+    def process(self, view_config,):        
+        return (view_config.image, view_config.azimuth, view_config.elevation, view_config.prompt,)
+
+class Trellis2LoadImagesFromFolder:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "folder_path": ("STRING", {"default": ""}),
+                "pattern": ("STRING", {"default": "*.png"}),
+            },
+        }
+
+    # Added the third output: image_with_alpha
+    RETURN_TYPES = ("IMAGE", "MASK", "IMAGE")
+    RETURN_NAMES = ("images", "masks", "image_with_alpha")
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+    OUTPUT_NODE = True
+
+    def process(self, folder_path, pattern):
+        import glob
+        
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError(f"Folder path does not exist: {folder_path}")
+
+        search_path = os.path.join(folder_path, pattern)
+        file_paths = sorted(glob.glob(search_path))
+
+        if not file_paths:
+            raise FileNotFoundError(f"No files matched the pattern '{pattern}' in '{folder_path}'")
+
+        loaded_images = []
+        loaded_masks = []
+        loaded_rgba = []
+
+        for file_path in file_paths:
+            try:
+                img = Image.open(file_path)
+                img = ImageOps.exif_transpose(img)
+                
+                # Force conversion to RGBA to safely extract alpha
+                if img.mode != "RGBA":
+                    img = img.convert("RGBA")
+                
+                img_rgb = img.convert("RGB")
+                alpha = img.split()[-1]
+                
+                # 1. Standard ComfyUI RGB Tensor -> [H, W, 3]
+                image_np = np.array(img_rgb).astype(np.float32) / 255.0
+                image_tensor = torch.from_numpy(image_np)
+                
+                # 2. Standard ComfyUI Mask Tensor -> [H, W]
+                mask_np = np.array(alpha).astype(np.float32) / 255.0
+                mask_tensor = torch.from_numpy(mask_np)
+                
+                # 3. Combine them into an RGBA Tensor -> [H, W, 4]
+                # We unsqueeze the mask from [H, W] to [H, W, 1] so it can concatenate with [H, W, 3]
+                rgba_tensor = torch.cat([image_tensor, mask_tensor.unsqueeze(-1)], dim=-1)
+                
+                loaded_images.append(image_tensor)
+                loaded_masks.append(mask_tensor)
+                loaded_rgba.append(rgba_tensor)
+                
+            except Exception as e:
+                print(f"Error loading image {file_path}: {e}")
+                continue
+
+        if not loaded_images:
+            raise ValueError("No valid images could be loaded.")
+
+        # Batch stack all outputs cleanly
+        output_images = torch.stack(loaded_images, dim=0)       # [B, H, W, 3]
+        output_masks = torch.stack(loaded_masks, dim=0)         # [B, H, W]
+        output_rgba = torch.stack(loaded_rgba, dim=0)           # [B, H, W, 4]
+
+        return (output_images, output_masks, output_rgba)
+            
         
 NODE_CLASS_MAPPINGS = {
     "Trellis2LoadModel": Trellis2LoadModel,
@@ -6817,6 +7094,10 @@ NODE_CLASS_MAPPINGS = {
     "Trellis2TexSlatMultiViewGenerator": Trellis2TexSlatMultiViewGenerator,
     "Trellis2MoGeCameraConfig": Trellis2MoGeCameraConfig,
     "Trellis2FovMoGeCameraConfig": Trellis2FovMoGeCameraConfig,
+    "Trellis2ImagesToViewConfigs": Trellis2ImagesToViewConfigs,
+    "Trellis2ViewConfigsToList": Trellis2ViewConfigsToList,
+    "Trellis2ExtractViewConfigDetails": Trellis2ExtractViewConfigDetails,
+    "Trellis2LoadImagesFromFolder": Trellis2LoadImagesFromFolder,
     }
     
 
@@ -6886,5 +7167,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Trellis2ShapeCascadeMultiViewGenerator": "Trellis2 - Shape Cascade MultiView Generator",
     "Trellis2TexSlatMultiViewGenerator": "Trellis2 - Tex Slat MultiView Generator",
     "Trellis2MoGeCameraConfig": "Trellis2 - MoGe Camera Config",
-    "Trellis2FovMoGeCameraConfig": "Trellis2 - Fov MoGe Camera Config"
+    "Trellis2FovMoGeCameraConfig": "Trellis2 - Fov MoGe Camera Config",
+    "Trellis2ImagesToViewConfigs": "Trellis2 - Images To ViewConfigs",
+    "Trellis2ViewConfigsToList": "Trellis2 - ViewConfigs To List",
+    "Trellis2ExtractViewConfigDetails": "Trellis2 - Extract ViewConfig Details",
+    "Trellis2LoadImagesFromFolder": "Trellis2 - Load Images From Folder",
     }
