@@ -14,6 +14,7 @@
 
 | Date | Description |
 | --- | --- |
+| **2026-06-02** | Added new node "Render MultiView (Nvdiffrast)"<br>Thanks GiusTex |
 | **2026-05-26** | Added new nodes used for the projection<br>Check the example Projection_Blender_Qwen_XViews |
 | **2026-05-22** | Added FOV Custom MoGe Camera node |
 | **2026-05-20** | Fixed Pixal3D<br>The node "Mesh with Voxel Advanced Generator" is compatible with Pixal3D |

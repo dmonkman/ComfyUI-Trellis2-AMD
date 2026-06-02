@@ -1,8 +1,8 @@
 {
   "id": "c6b02168-7f21-4777-9237-085c68439177",
   "revision": 0,
-  "last_node_id": 1769,
-  "last_link_id": 2336,
+  "last_node_id": 1771,
+  "last_link_id": 2343,
   "nodes": [
     {
       "id": 417,
@@ -51,7 +51,7 @@
         102
       ],
       "flags": {},
-      "order": 41,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -141,7 +141,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 28,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -185,7 +185,7 @@
         1226.3422371338038
       ],
       "flags": {},
-      "order": 45,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
@@ -293,7 +293,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 39,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
@@ -339,7 +339,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 46,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -379,7 +379,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 44,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
@@ -828,7 +828,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 43,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -935,7 +935,7 @@
       "type": "SetNode",
       "pos": [
         -1620.2464374836143,
-        -316.63292317806264
+        -412.60272371798885
       ],
       "size": [
         210,
@@ -944,7 +944,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 38,
+      "order": 33,
       "mode": 0,
       "inputs": [
         {
@@ -975,7 +975,7 @@
       "type": "SetNode",
       "pos": [
         -1620.2463850370282,
-        -438.6451864025856
+        -534.6149869425118
       ],
       "size": [
         210,
@@ -984,7 +984,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 37,
+      "order": 32,
       "mode": 0,
       "inputs": [
         {
@@ -1015,7 +1015,7 @@
       "type": "SetNode",
       "pos": [
         -1616.7844926050602,
-        -553.185543660096
+        -649.1553442000223
       ],
       "size": [
         210,
@@ -1024,7 +1024,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 36,
+      "order": 31,
       "mode": 0,
       "inputs": [
         {
@@ -1055,7 +1055,7 @@
       "type": "PrimitiveInt",
       "pos": [
         -2051.6281817568847,
-        -707.2772521415924
+        -803.2470526815188
       ],
       "size": [
         270,
@@ -1086,46 +1086,11 @@
       ]
     },
     {
-      "id": 1476,
-      "type": "PrimitiveInt",
-      "pos": [
-        -2053.951062852645,
-        -963.4956489502324
-      ],
-      "size": [
-        270,
-        82
-      ],
-      "flags": {},
-      "order": 16,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            1694
-          ]
-        }
-      ],
-      "title": "Seed",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.18.1",
-        "Node name for S&R": "PrimitiveInt"
-      },
-      "widgets_values": [
-        12345,
-        "fixed"
-      ]
-    },
-    {
       "id": 1477,
       "type": "SetNode",
       "pos": [
         -1736.6524300508183,
-        -932.5493371215787
+        -1028.519137661505
       ],
       "size": [
         210,
@@ -1134,7 +1099,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 32,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -1167,7 +1132,7 @@
       "type": "SetNode",
       "pos": [
         -1743.0402653291899,
-        -807.5137259663851
+        -903.4835265063115
       ],
       "size": [
         210,
@@ -1176,7 +1141,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 40,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
@@ -1209,7 +1174,7 @@
       "type": "SetNode",
       "pos": [
         -1738.0238965028832,
-        -674.7356193831677
+        -770.705419923094
       ],
       "size": [
         210,
@@ -1218,7 +1183,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 31,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -1260,7 +1225,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 17,
+      "order": 16,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1297,7 +1262,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 18,
+      "order": 17,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1332,7 +1297,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 19,
+      "order": 18,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1354,41 +1319,6 @@
       ]
     },
     {
-      "id": 1757,
-      "type": "GetNode",
-      "pos": [
-        -1308.1558052595067,
-        -557.7080390786815
-      ],
-      "size": [
-        210,
-        60
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 20,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            2320
-          ]
-        }
-      ],
-      "title": "Get_BlenderExec",
-      "properties": {
-        "Node name for S&R": "GetNode",
-        "aux_id": "kijai/ComfyUI-KJNodes"
-      },
-      "widgets_values": [
-        "BlenderExec"
-      ]
-    },
-    {
       "id": 418,
       "type": "SetNode",
       "pos": [
@@ -1402,7 +1332,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 42,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -1429,85 +1359,11 @@
       ]
     },
     {
-      "id": 1755,
-      "type": "PrimitiveString",
-      "pos": [
-        -2054.161969845816,
-        -1067.7938680007678
-      ],
-      "size": [
-        450.11045425358066,
-        62.55148828937024
-      ],
-      "flags": {},
-      "order": 21,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            2318
-          ]
-        }
-      ],
-      "title": "Blender exec path",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.22.0",
-        "Node name for S&R": "PrimitiveString"
-      },
-      "widgets_values": [
-        "C:\\Program Files\\Blender Foundation\\Blender 5.0\\blender.exe"
-      ]
-    },
-    {
-      "id": 1756,
-      "type": "SetNode",
-      "pos": [
-        -1549.3290110447306,
-        -1039.2441200636838
-      ],
-      "size": [
-        210,
-        60
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 34,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "link": 2318
-        }
-      ],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "title": "Set_BlenderExec",
-      "properties": {
-        "Node name for S&R": "SetNode",
-        "aux_id": "kijai/ComfyUI-KJNodes",
-        "previousName": "BlenderExec"
-      },
-      "widgets_values": [
-        "BlenderExec"
-      ]
-    },
-    {
       "id": 1027,
       "type": "SetNode",
       "pos": [
-        -1549.93037129384,
-        -210.20550059925893
+        -1557.506931452015,
+        -318.802939939188
       ],
       "size": [
         240.7466796875,
@@ -1516,7 +1372,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 35,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -1556,7 +1412,7 @@
         128.4801686561393
       ],
       "flags": {},
-      "order": 30,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -1607,63 +1463,18 @@
       "widgets_values": []
     },
     {
-      "id": 239,
-      "type": "Trellis2LoadImageWithTransparency",
-      "pos": [
-        -2030.2906395252817,
-        -136.72035719931847
-      ],
-      "size": [
-        627.638044195148,
-        672.4931923313359
-      ],
-      "flags": {},
-      "order": 22,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "links": []
-        },
-        {
-          "name": "mask",
-          "type": "MASK",
-          "links": null
-        },
-        {
-          "name": "image_with_alpha",
-          "type": "IMAGE",
-          "links": [
-            2144
-          ]
-        }
-      ],
-      "title": "Color Image",
-      "properties": {
-        "aux_id": "visualbruno/ComfyUI-Trellis2",
-        "ver": "e8098f5641702e74133c2dea0b45a13a3ab19985",
-        "Node name for S&R": "Trellis2LoadImageWithTransparency"
-      },
-      "widgets_values": [
-        "Image_1024_00192_.png",
-        "image"
-      ]
-    },
-    {
       "id": 1701,
       "type": "PrimitiveString",
       "pos": [
         -2049.5436414212527,
-        -582.3222433773402
+        -678.2920439172666
       ],
       "size": [
         357.1811471780279,
         64.51031227109809
       ],
       "flags": {},
-      "order": 23,
+      "order": 19,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1690,14 +1501,14 @@
       "type": "PrimitiveString",
       "pos": [
         -2048.776163842563,
-        -467.2100273686962
+        -563.1798279086227
       ],
       "size": [
         358.1960285227151,
         61.465761149363175
       ],
       "flags": {},
-      "order": 24,
+      "order": 20,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1724,14 +1535,14 @@
       "type": "PrimitiveString",
       "pos": [
         -2045.452586994433,
-        -344.9704038053838
+        -440.94020434531
       ],
       "size": [
         358.1960285227151,
         61.465761149363175
       ],
       "flags": {},
-      "order": 25,
+      "order": 21,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1765,7 +1576,7 @@
         58
       ],
       "flags": {},
-      "order": 26,
+      "order": 22,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1793,14 +1604,14 @@
       "type": "PrimitiveInt",
       "pos": [
         -2053.2271846434273,
-        -837.8993409925498
+        -933.8691415324762
       ],
       "size": [
         270,
         82
       ],
       "flags": {},
-      "order": 27,
+      "order": 23,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1835,7 +1646,7 @@
         698
       ],
       "flags": {},
-      "order": 29,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -1986,7 +1797,7 @@
         166
       ],
       "flags": {},
-      "order": 33,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -2028,14 +1839,6 @@
           "name": "_2",
           "type": "*",
           "link": 2317
-        },
-        {
-          "name": "blender_exec_path",
-          "type": "STRING",
-          "widget": {
-            "name": "blender_exec_path"
-          },
-          "link": 2320
         }
       ],
       "outputs": [
@@ -2051,22 +1854,98 @@
       "properties": {
         "proxyWidgets": [
           [
-            "1741",
+            "1771",
             "azimuths"
           ],
           [
-            "1741",
+            "1771",
             "elevations"
-          ],
-          [
-            "1741",
-            "blender_exec_path"
           ]
         ],
         "cnr_id": "comfy-core",
         "ver": "0.16.4"
       },
       "widgets_values": []
+    },
+    {
+      "id": 1476,
+      "type": "PrimitiveInt",
+      "pos": [
+        -2053.951062852645,
+        -1059.4654494901583
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            1694
+          ]
+        }
+      ],
+      "title": "Seed",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.18.1",
+        "Node name for S&R": "PrimitiveInt"
+      },
+      "widgets_values": [
+        12345,
+        "fixed"
+      ]
+    },
+    {
+      "id": 239,
+      "type": "Trellis2LoadImageWithTransparency",
+      "pos": [
+        -2037.8671996834566,
+        -245.31779653924752
+      ],
+      "size": [
+        627.638044195148,
+        672.4931923313359
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "image_with_alpha",
+          "type": "IMAGE",
+          "links": [
+            2144
+          ]
+        }
+      ],
+      "title": "Color Image",
+      "properties": {
+        "aux_id": "visualbruno/ComfyUI-Trellis2",
+        "ver": "e8098f5641702e74133c2dea0b45a13a3ab19985",
+        "Node name for S&R": "Trellis2LoadImageWithTransparency"
+      },
+      "widgets_values": [
+        "Image_1024_00192_.png",
+        "image"
+      ]
     }
   ],
   "links": [
@@ -2341,22 +2220,6 @@
       420,
       5,
       "INT"
-    ],
-    [
-      2318,
-      1755,
-      0,
-      1756,
-      0,
-      "STRING"
-    ],
-    [
-      2320,
-      1757,
-      0,
-      420,
-      6,
-      "STRING"
     ]
   ],
   "groups": [
@@ -2378,8 +2241,8 @@
       "bounding": [
         -2074.5335977455147,
         -1253.3358608842898,
-        711.4975963069055,
-        1813.4762266046487
+        717.8113579023402,
+        1697.3023427156782
       ],
       "color": "#b06634",
       "flags": {}
@@ -2416,8 +2279,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 35,
-          "lastNodeId": 1769,
-          "lastLinkId": 2336,
+          "lastNodeId": 1771,
+          "lastLinkId": 2343,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -4222,8 +4085,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 35,
-          "lastNodeId": 1769,
-          "lastLinkId": 2336,
+          "lastNodeId": 1771,
+          "lastLinkId": 2343,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -4234,8 +4097,8 @@
           "bounding": [
             -2499.590498447116,
             -620.9298757631317,
-            154.634765625,
-            188
+            131.818359375,
+            168
           ]
         },
         "outputNode": {
@@ -4257,7 +4120,7 @@
             ],
             "label": "prefix",
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -596.9298757631317
             ]
           },
@@ -4266,11 +4129,11 @@
             "name": "trimesh",
             "type": "TRIMESH",
             "linkIds": [
-              2294
+              2337
             ],
             "label": "textured_mesh",
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -576.9298757631317
             ]
           },
@@ -4283,7 +4146,7 @@
             ],
             "label": "source_image",
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -556.9298757631317
             ]
           },
@@ -4292,10 +4155,10 @@
             "name": "azimuths",
             "type": "STRING",
             "linkIds": [
-              2296
+              2338
             ],
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -536.9298757631317
             ]
           },
@@ -4304,10 +4167,10 @@
             "name": "elevations",
             "type": "STRING",
             "linkIds": [
-              2297
+              2339
             ],
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -516.9298757631317
             ]
           },
@@ -4320,20 +4183,8 @@
             ],
             "label": "seed",
             "pos": [
-              -2368.955732822116,
+              -2391.772139072116,
               -496.9298757631317
-            ]
-          },
-          {
-            "id": "92f12e7f-2c67-4789-868b-87cf607d2cae",
-            "name": "blender_exec_path",
-            "type": "STRING",
-            "linkIds": [
-              2319
-            ],
-            "pos": [
-              -2368.955732822116,
-              -476.9298757631317
             ]
           }
         ],
@@ -5504,7 +5355,7 @@
                 "localized_name": "images",
                 "name": "images",
                 "type": "IMAGE",
-                "link": 2252
+                "link": 2341
               },
               {
                 "localized_name": "azimuths",
@@ -5513,7 +5364,7 @@
                 "widget": {
                   "name": "azimuths"
                 },
-                "link": 2253
+                "link": 2342
               },
               {
                 "localized_name": "elevations",
@@ -5522,7 +5373,7 @@
                 "widget": {
                   "name": "elevations"
                 },
-                "link": 2254
+                "link": 2343
               }
             ],
             "outputs": [
@@ -5557,7 +5408,7 @@
               26
             ],
             "flags": {},
-            "order": 27,
+            "order": 26,
             "mode": 0,
             "inputs": [
               {
@@ -5595,7 +5446,7 @@
               26
             ],
             "flags": {},
-            "order": 31,
+            "order": 30,
             "mode": 0,
             "inputs": [
               {
@@ -5619,101 +5470,6 @@
             }
           },
           {
-            "id": 1741,
-            "type": "Trellis2RenderMultiView",
-            "pos": [
-              -1927.7718052073274,
-              -766.5766018747933
-            ],
-            "size": [
-              277.8462890625,
-              214
-            ],
-            "flags": {},
-            "order": 25,
-            "mode": 0,
-            "inputs": [
-              {
-                "localized_name": "trimesh",
-                "name": "trimesh",
-                "type": "TRIMESH",
-                "link": 2294
-              },
-              {
-                "localized_name": "blender_exec_path",
-                "name": "blender_exec_path",
-                "type": "STRING",
-                "widget": {
-                  "name": "blender_exec_path"
-                },
-                "link": 2319
-              },
-              {
-                "localized_name": "azimuths",
-                "name": "azimuths",
-                "type": "STRING",
-                "widget": {
-                  "name": "azimuths"
-                },
-                "link": 2296
-              },
-              {
-                "localized_name": "elevations",
-                "name": "elevations",
-                "type": "STRING",
-                "widget": {
-                  "name": "elevations"
-                },
-                "link": 2297
-              }
-            ],
-            "outputs": [
-              {
-                "localized_name": "images",
-                "name": "images",
-                "type": "IMAGE",
-                "links": [
-                  2252,
-                  2321
-                ]
-              },
-              {
-                "localized_name": "ortho_scale",
-                "name": "ortho_scale",
-                "type": "FLOAT",
-                "links": null
-              },
-              {
-                "localized_name": "azimuths",
-                "name": "azimuths",
-                "type": "STRING",
-                "links": [
-                  2253
-                ]
-              },
-              {
-                "localized_name": "elevations",
-                "name": "elevations",
-                "type": "STRING",
-                "links": [
-                  2254
-                ]
-              }
-            ],
-            "properties": {
-              "aux_id": "visualbruno/ComfyUI-Trellis2",
-              "ver": "52dbffc448d5446e1a9ce62700eae7c275d60898",
-              "Node name for S&R": "Trellis2RenderMultiView"
-            },
-            "widgets_values": [
-              1024,
-              1.2,
-              "C:\\Program Files\\Blender Foundation\\Blender 5.0\\blender.exe",
-              "0,90,180,270,0,0,45,315",
-              "0,0,0,0,90,-90,20,20"
-            ]
-          },
-          {
             "id": 1742,
             "type": "StringConcatenate",
             "pos": [
@@ -5727,7 +5483,7 @@
             "flags": {
               "collapsed": false
             },
-            "order": 26,
+            "order": 25,
             "mode": 0,
             "inputs": [
               {
@@ -5773,14 +5529,14 @@
               82
             ],
             "flags": {},
-            "order": 32,
+            "order": 31,
             "mode": 0,
             "inputs": [
               {
                 "localized_name": "images",
                 "name": "images",
                 "type": "IMAGE",
-                "link": 2321
+                "link": 2340
               },
               {
                 "localized_name": "filename_prefix",
@@ -5867,7 +5623,7 @@
             "flags": {
               "collapsed": false
             },
-            "order": 28,
+            "order": 27,
             "mode": 0,
             "inputs": [
               {
@@ -5913,7 +5669,7 @@
               82
             ],
             "flags": {},
-            "order": 33,
+            "order": 32,
             "mode": 0,
             "inputs": [
               {
@@ -6004,7 +5760,7 @@
             "flags": {
               "collapsed": false
             },
-            "order": 29,
+            "order": 28,
             "mode": 0,
             "inputs": [
               {
@@ -6050,7 +5806,7 @@
               82
             ],
             "flags": {},
-            "order": 34,
+            "order": 33,
             "mode": 0,
             "inputs": [
               {
@@ -6101,7 +5857,7 @@
             "flags": {
               "collapsed": false
             },
-            "order": 30,
+            "order": 29,
             "mode": 0,
             "inputs": [
               {
@@ -6147,7 +5903,7 @@
               82
             ],
             "flags": {},
-            "order": 35,
+            "order": 34,
             "mode": 0,
             "inputs": [
               {
@@ -6283,6 +6039,92 @@
             "widgets_values": [
               "qwen-image-edit-2511-Q4_K_M.gguf"
             ]
+          },
+          {
+            "id": 1771,
+            "type": "Trellis2RenderMultiViewNvdiffrast",
+            "pos": [
+              -1997.9426496956773,
+              -783.5600743842374
+            ],
+            "size": [
+              346.8755859375,
+              214
+            ],
+            "flags": {},
+            "order": 35,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "trimesh",
+                "name": "trimesh",
+                "type": "TRIMESH",
+                "link": 2337
+              },
+              {
+                "localized_name": "azimuths",
+                "name": "azimuths",
+                "type": "STRING",
+                "widget": {
+                  "name": "azimuths"
+                },
+                "link": 2338
+              },
+              {
+                "localized_name": "elevations",
+                "name": "elevations",
+                "type": "STRING",
+                "widget": {
+                  "name": "elevations"
+                },
+                "link": 2339
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "images",
+                "name": "images",
+                "type": "IMAGE",
+                "links": [
+                  2340,
+                  2341
+                ]
+              },
+              {
+                "localized_name": "ortho_scale",
+                "name": "ortho_scale",
+                "type": "FLOAT",
+                "links": null
+              },
+              {
+                "localized_name": "azimuths",
+                "name": "azimuths",
+                "type": "STRING",
+                "links": [
+                  2342
+                ]
+              },
+              {
+                "localized_name": "elevations",
+                "name": "elevations",
+                "type": "STRING",
+                "links": [
+                  2343
+                ]
+              }
+            ],
+            "properties": {
+              "aux_id": "visualbruno/ComfyUI-Trellis2",
+              "ver": "0b324cd75dcdc869ffc53f1ebef4d93cb8d1cd4c",
+              "Node name for S&R": "Trellis2RenderMultiViewNvdiffrast"
+            },
+            "widgets_values": [
+              1024,
+              1.2,
+              "180,0,90,270,0,0",
+              "0,0,0,0,90,-90",
+              false
+            ]
           }
         ],
         "groups": [
@@ -6300,30 +6142,6 @@
           }
         ],
         "links": [
-          {
-            "id": 2252,
-            "origin_id": 1741,
-            "origin_slot": 0,
-            "target_id": 1708,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
-            "id": 2253,
-            "origin_id": 1741,
-            "origin_slot": 2,
-            "target_id": 1708,
-            "target_slot": 1,
-            "type": "STRING"
-          },
-          {
-            "id": 2254,
-            "origin_id": 1741,
-            "origin_slot": 3,
-            "target_id": 1708,
-            "target_slot": 2,
-            "type": "STRING"
-          },
           {
             "id": 2255,
             "origin_id": 1708,
@@ -6581,36 +6399,12 @@
             "type": "IMAGE"
           },
           {
-            "id": 2294,
-            "origin_id": -10,
-            "origin_slot": 1,
-            "target_id": 1741,
-            "target_slot": 0,
-            "type": "TRIMESH"
-          },
-          {
             "id": 2295,
             "origin_id": -10,
             "origin_slot": 2,
             "target_id": 1711,
             "target_slot": 0,
             "type": "IMAGE"
-          },
-          {
-            "id": 2296,
-            "origin_id": -10,
-            "origin_slot": 3,
-            "target_id": 1741,
-            "target_slot": 2,
-            "type": "STRING"
-          },
-          {
-            "id": 2297,
-            "origin_id": -10,
-            "origin_slot": 4,
-            "target_id": 1741,
-            "target_slot": 3,
-            "type": "STRING"
           },
           {
             "id": 2298,
@@ -6677,22 +6471,6 @@
             "type": "INT"
           },
           {
-            "id": 2319,
-            "origin_id": -10,
-            "origin_slot": 6,
-            "target_id": 1741,
-            "target_slot": 1,
-            "type": "STRING"
-          },
-          {
-            "id": 2321,
-            "origin_id": 1741,
-            "origin_slot": 0,
-            "target_id": 1758,
-            "target_slot": 0,
-            "type": "IMAGE"
-          },
-          {
             "id": 2322,
             "origin_id": 1742,
             "origin_slot": 0,
@@ -6747,6 +6525,62 @@
             "target_id": 1761,
             "target_slot": 1,
             "type": "STRING"
+          },
+          {
+            "id": 2337,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 1771,
+            "target_slot": 0,
+            "type": "TRIMESH"
+          },
+          {
+            "id": 2338,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 1771,
+            "target_slot": 1,
+            "type": "STRING"
+          },
+          {
+            "id": 2339,
+            "origin_id": -10,
+            "origin_slot": 4,
+            "target_id": 1771,
+            "target_slot": 2,
+            "type": "STRING"
+          },
+          {
+            "id": 2340,
+            "origin_id": 1771,
+            "origin_slot": 0,
+            "target_id": 1758,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 2341,
+            "origin_id": 1771,
+            "origin_slot": 0,
+            "target_id": 1708,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 2342,
+            "origin_id": 1771,
+            "origin_slot": 2,
+            "target_id": 1708,
+            "target_slot": 1,
+            "type": "STRING"
+          },
+          {
+            "id": 2343,
+            "origin_id": 1771,
+            "origin_slot": 3,
+            "target_id": 1708,
+            "target_slot": 2,
+            "type": "STRING"
           }
         ],
         "extra": {
@@ -6766,10 +6600,10 @@
     "VHS_MetadataImage": true,
     "VHS_KeepIntermediate": true,
     "ds": {
-      "scale": 0.7026935560269463,
+      "scale": 0.3605929029036315,
       "offset": [
-        2161.113208193359,
-        1063.971148054423
+        2977.5242915325985,
+        1686.58114193939
       ]
     }
   },
