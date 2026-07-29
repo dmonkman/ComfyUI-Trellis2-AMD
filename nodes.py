@@ -392,7 +392,26 @@ class Trellis2LoadModel:
         
         dinov3_model_path = os.path.join(folder_paths.models_dir,"facebook","dinov3-vitl16-pretrain-lvd1689m","model.safetensors")
         if not os.path.exists(dinov3_model_path):
-            raise Exception("Facebook Dinov3 model not found in models/facebook/dinov3-vitl16-pretrain-lvd1689m folder")       
+            print('Downloading dinov3 model files ...')            
+            from huggingface_hub import hf_hub_download
+            
+            repo_id = "visualbruno/dinov3-vitl16-pretrain-lvd1689m"
+            target_dir = os.path.join(folder_paths.models_dir, "facebook", "dinov3-vitl16-pretrain-lvd1689m")
+            
+            os.makedirs(target_dir, exist_ok=True)
+
+            # Enable the fast Rust-based transfer backend (multi-connection, much faster)
+            os.environ.setdefault("HF_HUB_ENABLE_HF_TRANSFER", "1")
+
+            for fname in ["model.safetensors", "config.json", "preprocessor_config.json"]:
+                print(f"downloading {fname} ...")
+                downloaded_path = hf_hub_download(
+                    repo_id=repo_id,
+                    filename=fname,
+                    local_dir=target_dir,
+                    local_dir_use_symlinks=False,
+                )
+                print(f"{fname} -> {downloaded_path}")            
         
         trellis_image_large_path = os.path.join(folder_paths.models_dir,"microsoft","TRELLIS-image-large","ckpts","ss_dec_conv3d_16l8_fp16.safetensors")
         if not os.path.exists(trellis_image_large_path):
