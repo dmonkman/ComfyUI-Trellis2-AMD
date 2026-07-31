@@ -7296,6 +7296,69 @@ class Trellis2RenderMultiViewNvdiffrast:
             existing_base = None
         return existing_base
         
+class Trellis2SelectImagesForMultiView:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "front": ("STRING",{"default":""}),
+                "preprocess": ("BOOLEAN",{"default":False}),
+                "padding": ("INT",{"default":0,"min":0,"max":1024}),
+                "remove_background": ("BOOLEAN",{"default":False}),
+                "max_size": ("INT",{"default":2048,"min":512,"max":8192,"step":128}),
+            },
+            "optional":{
+                "back": ("STRING",{"default":""}),
+                "left": ("STRING",{"default":""}),
+                "right": ("STRING",{"default":""})
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "IMAGE",)
+    RETURN_NAMES = ("front", "back", "left", "right",)
+    FUNCTION = "process"
+    CATEGORY = "Trellis2Wrapper"
+
+    def load_view(self, path):
+        """Resolve a path (absolute, or relative to the ComfyUI input dir) to an IMAGE tensor."""
+        if path is None or str(path).strip() == '':
+            return None
+
+        path = str(path).strip()
+        if not os.path.exists(path):
+            path = os.path.join(folder_paths.get_input_directory(), path)
+            if not os.path.exists(path):
+                return None
+
+        image = Image.open(path)
+        image = image.convert("RGBA" if 'A' in image.getbands() else "RGB")
+        return pil2tensor(image)
+
+    def process(self, front, preprocess, padding, remove_background, max_size, back = None, left = None, right = None):
+
+        front_image = self.load_view(front)
+        back_image = self.load_view(back)
+        left_image = self.load_view(left)
+        right_image = self.load_view(right)
+
+        if front_image is None:
+            raise ValueError(f"Trellis2SelectImagesForMultiView: could not find front image '{front}'")
+
+        if preprocess:
+            t2preprocess = Trellis2PreProcessImage()
+
+            # process() is a ComfyUI node function: it returns a 1-tuple, so unwrap it.
+            if front_image is not None:
+                front_image = t2preprocess.process(front_image, padding, remove_background, max_size)[0]
+            if back_image is not None:
+                back_image = t2preprocess.process(back_image, padding, remove_background, max_size)[0]
+            if left_image is not None:
+                left_image = t2preprocess.process(left_image, padding, remove_background, max_size)[0]
+            if right_image is not None:
+                right_image = t2preprocess.process(right_image, padding, remove_background, max_size)[0]
+
+        return (front_image, back_image, left_image, right_image, )
+        
         
 NODE_CLASS_MAPPINGS = {
     "Trellis2LoadModel": Trellis2LoadModel,
@@ -7369,6 +7432,7 @@ NODE_CLASS_MAPPINGS = {
     "Trellis2ExtractViewConfigDetails": Trellis2ExtractViewConfigDetails,
     "Trellis2LoadImagesFromFolder": Trellis2LoadImagesFromFolder,
     "Trellis2RenderMultiViewNvdiffrast": Trellis2RenderMultiViewNvdiffrast,
+    "Trellis2SelectImagesForMultiView": Trellis2SelectImagesForMultiView,
     }
     
 
@@ -7444,4 +7508,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Trellis2ExtractViewConfigDetails": "Trellis2 - Extract ViewConfig Details",
     "Trellis2LoadImagesFromFolder": "Trellis2 - Load Images From Folder",
     "Trellis2RenderMultiViewNvdiffrast": "Trellis2 - Render MultiView (Nvdiffrast)",
+    "Trellis2SelectImagesForMultiView": "Trellis2 - Select Images For MultiView",
     }
