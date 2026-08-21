@@ -340,12 +340,12 @@ class Trellis2LoadModel:
         return {
             "required": {
                 "modelname": (["microsoft/TRELLIS.2-4B","visualbruno/TRELLIS.2-4B-FP8","TencentARC/Pixal3D-T"],{"default":"microsoft/TRELLIS.2-4B"}),
-                "backend": (["flash_attn","xformers","sdpa","flash_attn_3"],{"default":"flash_attn"}),
+                "backend": (["flash_attn","xformers","sdpa","flash_attn_3","aule"],{"default":"flash_attn"}),
                 "device": (["cpu","cuda"],{"default":"cuda"}),
                 "low_vram": ("BOOLEAN",{"default":True}),
                 "keep_models_loaded": ("BOOLEAN", {"default":True}),
                 "conv_backend": (["spconv","torchsparse","flex_gemm"],{"default":"flex_gemm"}),
-                "sparse_backend": (["xformers","flash_attn"],{"default":"flash_attn"}),
+                "sparse_backend": (["xformers","flash_attn","aule"],{"default":"flash_attn"}),
                 "use_reconviagen": ("BOOLEAN",{"default":False}),
                 #"naf_chunk_size":(["None","144","208","272","336","400","464","528","592","656","720","784","848","912","976","1024"],{"default":"None"}),
             }
@@ -7595,3 +7595,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Trellis2SmoothMeshWithPyMeshlab": "Trellis2 - Smooth Mesh With PyMeshlab",
     "Trellis2SmoothTrimeshWithPyMeshlab": "Trellis2 - Smooth Trimesh With PyMeshlab",
     }
+
+from .trellis2_profiler import NODE_CLASS_MAPPINGS as _P_MAP, NODE_DISPLAY_NAME_MAPPINGS as _P_DMAP
+NODE_CLASS_MAPPINGS.update(_P_MAP); NODE_DISPLAY_NAME_MAPPINGS.update(_P_DMAP)

@@ -6,3 +6,4 @@ scipy
 open3d
 plotly
 rembg
+aule_attention

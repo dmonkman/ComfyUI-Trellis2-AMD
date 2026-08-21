@@ -10,6 +10,21 @@ __all__ = [
     'sparse_windowed_scaled_dot_product_cross_attention',
 ]
 
+def _windowed_varlen(feats_qkv, seq_lens, attn_fn, packed=3):
+    """feats_qkv: [M, packed, H, C] (packed=3 self) sliced by seq_lens per window."""
+    outs, off = [], 0
+    for L in seq_lens.tolist():
+        parts = feats_qkv[off:off + L].unbind(dim=1)          # each [L, H, C]
+        q, k, v = parts if packed == 3 else (parts[0], *feats_qkv[off:off+L, 1:].unbind(dim=1))
+
+        q = q.transpose(0, 1).unsqueeze(0)
+        k = k.transpose(0, 1).unsqueeze(0)
+        v = v.transpose(0, 1).unsqueeze(0)
+
+        outs.append(attn_fn(q, k, v)[0].transpose(0, 1))      # [L, H, C]
+        off += L
+
+    return torch.cat(outs, dim=0)
 
 def calc_window_partition(
     tensor: SparseTensor,
@@ -55,7 +70,7 @@ def calc_window_partition(
         attn_func_args = {
             'attn_bias': xops.fmha.BlockDiagonalMask.from_seqlens(seq_lens)
         }
-    elif config.ATTN == 'flash_attn':
+    else:   # flash_attn, aule, or fallback
         attn_func_args = {
             'cu_seqlens': torch.cat([torch.tensor([0], device=tensor.device), torch.cumsum(seq_lens, dim=0)], dim=0).int(),
             'max_seqlen': torch.max(seq_lens)
@@ -102,17 +117,26 @@ def sparse_windowed_scaled_dot_product_self_attention(
             start += seq_lens[i]
 
     if config.ATTN == 'xformers':
-        if 'xops' not in globals():
-            import xformers.ops as xops
-        q, k, v = qkv_feats.unbind(dim=1)                                               # [M, H, C]
-        q = q.unsqueeze(0)                                                              # [1, M, H, C]
-        k = k.unsqueeze(0)                                                              # [1, M, H, C]
-        v = v.unsqueeze(0)                                                              # [1, M, H, C]
-        out = xops.memory_efficient_attention(q, k, v, **attn_func_args)[0]             # [M, H, C]
+        try:
+            if 'xops' not in globals():
+                import xformers.ops as xops
+            q, k, v = qkv_feats.unbind(dim=1)                                               # [M, H, C]
+            q = q.unsqueeze(0)                                                              # [1, M, H, C]
+            k = k.unsqueeze(0)                                                              # [1, M, H, C]
+            v = v.unsqueeze(0)                                                              # [1, M, H, C]
+            out = xops.memory_efficient_attention(q, k, v, **attn_func_args)[0]             # [M, H, C]
+        except Exception:
+            from torch.nn.functional import scaled_dot_product_attention as sdpa
+            out = _windowed_varlen(qkv_feats, seq_lens, lambda q, k, v: sdpa(q, k, v)) # [M, H, C]
+            
     elif config.ATTN == 'flash_attn':
-        if 'flash_attn' not in globals():
-            import flash_attn
-        out = flash_attn.flash_attn_varlen_qkvpacked_func(qkv_feats, **attn_func_args)  # [M, H, C]
+        try:
+            if 'flash_attn' not in globals():
+                import flash_attn
+            out = flash_attn.flash_attn_varlen_qkvpacked_func(qkv_feats, **attn_func_args)
+        except Exception:
+            from torch.nn.functional import scaled_dot_product_attention as sdpa
+            out = _windowed_varlen(qkv_feats, seq_lens, lambda q, k, v: sdpa(q, k, v)) # [M, H, C]
 
     out = out[bwd_indices]      # [T, H, C]
 

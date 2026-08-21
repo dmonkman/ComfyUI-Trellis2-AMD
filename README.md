@@ -87,13 +87,13 @@ To use **TencentARC/Pixal3D-T** model, it's required to install **natten** packa
 
 ## ⚙️ Installation Guide
 
-> Tested on **Windows 11** with **Python 3.11** and **Torch = 2.7.0 + cu128**.
+> Tested on **Windows 11** with **Python 3.12** and **Torch = 2.12.0 + cu128**.
 
 ### 1. Install Wheels
 
 #### For a standard python environment:
 
-**If you use Torch v2.7.0:**
+**If you use Torch v2.12.0:**
 ```bash
 python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/cumesh-1.0-cp311-cp311-win_amd64.whl
 python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
@@ -102,35 +102,16 @@ python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch
 python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/o_voxel-0.0.1-cp311-cp311-win_amd64.whl
 ```
 
-**If you use Torch v2.8.0:**
-```bash
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch280/cumesh-1.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch280/nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch280/nvdiffrec_render-0.0.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch280/flex_gemm-0.0.1-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch280/o_voxel-0.0.1-cp311-cp311-win_amd64.whl
-```
-
 ---
 
 #### For ComfyUI Portable:
 
-**If you use Torch v2.7.0:**
+**If you use Torch v2.12.0:**
 ```bash
 python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\cumesh-1.0-cp311-cp311-win_amd64.whl
 python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\nvdiffrec_render-0.0.0-cp311-cp311-win_amd64.whl
 python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\flex_gemm-0.0.1-cp311-cp311-win_amd64.whl
 python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\o_voxel-0.0.1-cp311-cp311-win_amd64.whl
-```
-
-**If you use Torch v2.8.0:**
-```bash
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch280\cumesh-1.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch280\nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch280\nvdiffrec_render-0.0.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch280\flex_gemm-0.0.1-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch280\o_voxel-0.0.1-cp311-cp311-win_amd64.whl
 ```
 
 ---
@@ -143,15 +124,15 @@ python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\w
 
 #### o_voxel
 
-Use my own version of Trellis.2 here: https://github.com/visualbruno/TRELLIS.2
+Use my own ROCm version of Trellis.2 here: https://github.com/dmonkman/TRELLIS.2
 
 #### Cumesh 
 
-Use my own version of Cumesh here: https://github.com/visualbruno/CuMesh
+Use my own ROCm version of Cumesh here: https://github.com/dmonkman/CuMesh
 
 ### FlexGEMM
 
-Use my own version of FlexGEMM here: https://github.com/visualbruno/FlexGEMM
+Use my own ROCm version of FlexGEMM here: https://github.com/dmonkman/FlexGEMM
 
 ### natten (only used for TencentARC/Pixal3D-T model)
 
@@ -173,6 +154,64 @@ python -m pip install -r ComfyUI/custom_nodes/ComfyUI-Trellis2/requirements.txt
 
 ```bash
 python_embeded\python.exe -m pip install -r ComfyUI\custom_nodes\ComfyUI-Trellis2\requirements.txt
+```
+
+### Note: Why I Included Aule Attention
+
+This provides users with hardware that doesn't support flash attention, have no matrix cores, and/or have low VRAM.
+SDPA (the default) is faster while it fits in VRAM, but its memory grows quadratically and collapses once it runs out of memory. These benchmarks 
+demonstrae the results on an RX 6800 XT 16GB:
+
+```
+# Causal workloads include Stable Diffusion, Video Diffusion, Image-to-3D, Upscalers, ControlNet, Encoders
+--- Performance Benchmark (Causal = False) ---
+Performance Benchmark Aule (B=1, H=32, D=128)
+==================================================
+Seq Len      Time (ms)    Peak Memory (MB) TFLOPS      
+--------------------------------------------------
+512          2.42         98.63        1.8         
+1024         8.03         115.48       2.1         
+2048         31.05        149.16       2.2         
+4096         123.61       216.53       2.2         
+8192         494.46       351.27       2.2         
+==================================================
+Performance Benchmark SDPA (B=1, H=32, D=128)
+==================================================
+Seq Len      Time (ms)    Peak Memory (MB) TFLOPS      
+--------------------------------------------------
+512          1.29         203.44       3.3         
+1024         4.33         476.09       4.0         
+2048         16.78        1474.36      4.1         
+4096         58.44        5282.86      4.7         
+8192         3080.63      20147.60     0.4         
+==================================================
+NOTE: For standard ComfyUI, cross-attention is much better than SDPA
+```
+
+But that is worst case. **For causal workloads (LLMs, autoregressive image/video generators), there is no performance penalty. Aule was strictly better than SDPA.**
+```
+# Non-Causal workloads include LLMs, 
+--- Performance Benchmark (Causal = True) ---
+Performance Benchmark Aule (B=1, H=32, D=128)
+==================================================
+Seq Len      Time (ms)    Peak Memory (MB) TFLOPS      
+--------------------------------------------------
+512          1.55         98.63        2.8         
+1024         4.73         115.48       3.6         
+2048         16.78        149.16       4.1         
+4096         64.26        216.53       4.3         
+8192         252.50       351.27       4.4         
+==================================================
+Performance Benchmark SDPA (B=1, H=32, D=128)
+==================================================
+Seq Len      Time (ms)    Peak Memory (MB) TFLOPS      
+--------------------------------------------------
+512          1.37         204.49       3.1         
+1024         4.93         480.28       3.5         
+2048         19.53        1491.14      3.5         
+4096         73.78        5349.97      3.7         
+8192         3523.50      20416.04     0.3         
+==================================================
 ```
 
 ## 🙏 Acknowledgements

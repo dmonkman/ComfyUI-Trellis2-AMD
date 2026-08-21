@@ -200,6 +200,23 @@ def sparse_scaled_dot_product_attention(*args, **kwargs):
 
         return torch.cat(outs, dim=0)  # [TQ, H, Cv]
 
+    def _aule_varlen(q, k, v, q_seqlen, kv_seqlen):
+        from aule import flash_attention_triton
+        outs, q_off, kv_off = [], 0, 0
+        for n in range(len(q_seqlen)):
+            qn, kn = q_seqlen[n], kv_seqlen[n]
+
+            q_i = q[q_off:q_off + qn].transpose(0, 1).unsqueeze(0)   # [1, H, qn, C]
+            k_i = k[kv_off:kv_off + kn].transpose(0, 1).unsqueeze(0)
+            v_i = v[kv_off:kv_off + kn].transpose(0, 1).unsqueeze(0)
+
+            out_i = flash_attention_triton(q_i, k_i, v_i, causal=False)[0]  # [H, qn, Cv]
+
+            outs.append(out_i.transpose(0, 1))                              # [qn, H, Cv]
+            q_off += qn
+            kv_off += kn
+        return torch.cat(outs, dim=0)
+    
     if num_all_args == 1:
         q, k, v = qkv.unbind(dim=1)  # qkv: [T, 3, H, C]
     elif num_all_args == 2:
@@ -256,6 +273,9 @@ def sparse_scaled_dot_product_attention(*args, **kwargs):
         except Exception:
             # fallback to torch SDPA
             out = _sdpa_varlen(q, k, v, q_seqlen, kv_seqlen)
+
+    elif config.ATTN == 'aule':
+        out = _aule_varlen(q, k, v, q_seqlen, kv_seqlen)
 
     else:
         # final fallback: torch SDPA
