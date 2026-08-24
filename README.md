@@ -190,7 +190,7 @@ NOTE: For standard ComfyUI, cross-attention is much better than SDPA
 
 But that is worst case. **For causal workloads (LLMs, autoregressive image/video generators), there is no performance penalty. Aule was strictly better than SDPA.**
 ```
-# Non-Causal workloads include LLMs, 
+# Non-Causal workloads include LLMs and autoregressive video/audio models
 --- Performance Benchmark (Causal = True) ---
 Performance Benchmark Aule (B=1, H=32, D=128)
 ==================================================
