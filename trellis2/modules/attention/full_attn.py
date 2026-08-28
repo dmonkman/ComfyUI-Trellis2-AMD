@@ -23,6 +23,13 @@ def _naive_sdpa(q, k, v):
     out = out.permute(0, 2, 1, 3)   # [N, L, H, C]
     return out
 
+def _dense_sdpa(q, k, v):
+    """SDPA fallback for [N, L, H, C] tensors."""
+    from torch.nn.functional import scaled_dot_product_attention as sdpa
+    q = q.permute(0, 2, 1, 3); 
+    k = k.permute(0, 2, 1, 3); 
+    v = v.permute(0, 2, 1, 3)
+    return sdpa(q, k, v).permute(0, 2, 1, 3)
 
 @overload
 def scaled_dot_product_attention(qkv: torch.Tensor) -> torch.Tensor:
@@ -95,22 +102,38 @@ def scaled_dot_product_attention(*args, **kwargs):
         device = q.device    
 
     if config.BACKEND == 'xformers':
-        if 'xops' not in globals():
-            import xformers.ops as xops
-        if num_all_args == 1:
-            q, k, v = qkv.unbind(dim=2)
-        elif num_all_args == 2:
-            k, v = kv.unbind(dim=2)
-        out = xops.memory_efficient_attention(q, k, v)
+        try:
+            if 'xops' not in globals():
+                import xformers.ops as xops
+            if num_all_args == 1:
+                q, k, v = qkv.unbind(dim=2)
+            elif num_all_args == 2:
+                k, v = kv.unbind(dim=2)
+            out = xops.memory_efficient_attention(q, k, v)
+        except Exception:
+            if num_all_args == 1:
+                q, k, v = qkv.unbind(dim=2)
+            elif num_all_args == 2:
+                k, v = kv.unbind(dim=2)
+            out = _dense_sdpa(q, k, v)
+
     elif config.BACKEND == 'flash_attn':
-        if 'flash_attn' not in globals():
-            import flash_attn
-        if num_all_args == 1:
-            out = flash_attn.flash_attn_qkvpacked_func(qkv)
-        elif num_all_args == 2:
-            out = flash_attn.flash_attn_kvpacked_func(q, kv)
-        elif num_all_args == 3:
-            out = flash_attn.flash_attn_func(q, k, v)
+        try:
+            if 'flash_attn' not in globals():
+                import flash_attn
+            if num_all_args == 1:
+                out = flash_attn.flash_attn_qkvpacked_func(qkv)
+            elif num_all_args == 2:
+                out = flash_attn.flash_attn_kvpacked_func(q, kv)
+            elif num_all_args == 3:
+                out = flash_attn.flash_attn_func(q, k, v)
+        except Exception:
+            if num_all_args == 1:
+                q, k, v = qkv.unbind(dim=2)
+            elif num_all_args == 2:
+                k, v = kv.unbind(dim=2)
+            out = _dense_sdpa(q, k, v)
+
     elif config.BACKEND == 'flash_attn_3':
         if 'flash_attn_3' not in globals():
             import flash_attn_interface as flash_attn_3
@@ -121,6 +144,7 @@ def scaled_dot_product_attention(*args, **kwargs):
                 out = flash_attn_3.flash_attn_func(q, k, v)
             elif num_all_args == 3:
                 out = flash_attn_3.flash_attn_func(q, k, v)
+
     elif config.BACKEND == 'sdpa':
         if 'sdpa' not in globals():
             from torch.nn.functional import scaled_dot_product_attention as sdpa
@@ -133,12 +157,25 @@ def scaled_dot_product_attention(*args, **kwargs):
         v = v.permute(0, 2, 1, 3)   # [N, H, L, C]
         out = sdpa(q, k, v)         # [N, H, L, C]
         out = out.permute(0, 2, 1, 3)   # [N, L, H, C]
+
     elif config.BACKEND == 'naive':
         if num_all_args == 1:
             q, k, v = qkv.unbind(dim=2)
         elif num_all_args == 2:
             k, v = kv.unbind(dim=2)
         out = _naive_sdpa(q, k, v)
+
+    elif config.BACKEND == 'aule':
+        from aule import flash_attention_triton
+        if num_all_args == 1:
+            q, k, v = qkv.unbind(dim=2)
+        elif num_all_args == 2:
+            k, v = kv.unbind(dim=2)
+        q = q.permute(0, 2, 1, 3); 
+        k = k.permute(0, 2, 1, 3); 
+        v = v.permute(0, 2, 1, 3)  # [N,H,L,C]
+        out = flash_attention_triton(q, k, v, causal=False).permute(0, 2, 1, 3)          # [N,L,H,C]
+        
     else:
         raise ValueError(f"Unknown attention module: {config.BACKEND}")
     

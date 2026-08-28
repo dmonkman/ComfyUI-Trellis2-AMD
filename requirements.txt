@@ -1,3 +1,66 @@
+# --- ComfyUI Requirements ---
+comfyui-frontend-package==1.49.6
+comfyui-workflow-templates==0.11.43
+comfyui-embedded-docs==0.5.10
+#torch   # these three are AMD/ROCm specific and need to be installed via custom wheels (found at @https://stable.repo.amd.com/rocm/whl-next/)
+#torchaudio
+#torchvision
+torchsde
+numpy>=1.25.0
+einops
+transformers==4.56.0    # 5.x.x breaks stuff
+tokenizers>=0.13.3
+sentencepiece
+safetensors>=0.4.2
+aiohttp>=3.11.8
+yarl>=1.18.0
+pyyaml
+Pillow
+scipy
+tqdm
+psutil
+alembic
+SQLAlchemy>=2.0.0
+filelock
+av>=16.0.0
+comfy-kitchen==0.2.31
+comfy-aimdo==0.4.13
+requests
+simpleeval>=1.0.0
+blake3
+
+# --- Non-essential dependencies ---
+comfy-cli
+comfyui-manager
+matrix-nio
+kornia>=0.7.1
+spandrel
+pydantic~=2.0
+pydantic-settings~=2.0
+PyOpenGL>=3.1.8
+comfy-angle
+
+# --- TRELLIS.2 core (from official setup.sh) ---
+imageio
+imageio-ffmpeg
+tqdm
+easydict
+opencv-python-headless
+ninja
+trimesh
+transformers==4.56.0   # pinned: 5.x breaks safe_open backend arg
+gradio==6.0.1
+tensorboard
+pandas
+lpips
+zstandard
+pillow
+kornia
+timm
+plyfile
+utils3d @ git+https://github.com/EasternJournalist/utils3d.git@9a4eb15e4021b67b12c460c7057d642626897ec8
+
+# --- ComfyUI-Trellis2 wrapper extras ---
 meshlib
 requests
 pymeshlab
@@ -6,3 +69,26 @@ scipy
 open3d
 plotly
 rembg
+aule_attention
+pyfqmr
+onnxruntime            # rembg's engine; CPU build (NOT onnxruntime-gpu on AMD)
+
+# --- ROCm / Windows-specific ---
+triton-windows; platform_system == 'Windows'        # FlexGEMM Triton kernels (Windows build of Triton).
+                                                    # On Linux, pytorch-triton-rocm ships with the ROCm torch install
+
+                                                    # --- Assorted custom node dependencies ---
+# - An assortment of packages that covered most dependencies for the extensions I have installed.
+# - Including them in this file helps if you need to recreate the venv but want to minimize manually fixing other custom nodes.
+# glfw
+# pyOpenSSL
+# deepdiff 
+# dill
+# piexif 
+# ultralytics 
+# webcolors 
+# watchdog
+# segment_anything
+# ollama
+# librosa
+# blend_modes
