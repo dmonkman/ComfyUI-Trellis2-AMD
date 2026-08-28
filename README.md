@@ -148,7 +148,7 @@ pip install \
 ```
 ---
 
-**Check the folder wheels for the other versions if you want to try Python 3.13 or 3.14.**
+**⚠️ Python 3.13 and 3.14 wheels are also included in separate folders, but may lack dependencies, specifically on Windows.**
 
 ---
 
