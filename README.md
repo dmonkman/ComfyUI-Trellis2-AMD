@@ -166,7 +166,7 @@ Use my own ROCm version of Cumesh here: https://github.com/dmonkman/CuMesh-ROCm
 Use my own ROCm version of FlexGEMM here: https://github.com/dmonkman/FlexGEMM-ROCm
 
 ### natten (only used for TencentARC/Pixal3D-T model) 
-> ⚠️ **I didn't try or port this on AMD, may need a ROCm port**
+> ⚠️ **I didn't try this on AMD. It may need a ROCm port**
 
 https://github.com/SHI-Labs/NATTEN
 
