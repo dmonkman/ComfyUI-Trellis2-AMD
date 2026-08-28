@@ -125,6 +125,8 @@ python -c "import torch; print(torch.__version__, torch.version.hip, torch.cuda.
 
 ### Step 3. Install Custom Wheels
 
+Ensure you have cloned this repo into your `ComfyUI/custom_nodes` directory. Then install the included wheels:
+
 Windows
 ```powershell
 cd C:\path\to\your\ComfyUI\custom_nodes\ComfyUI-Trellis2-AMD
@@ -135,7 +137,7 @@ pip install `
   ".\wheels\Windows\Python3.12\nvdiffrast-0.4.0+rocm10.0-cp312-cp312-win_amd64.whl"
 ```
 
-On Linux, use `wheels/Linux/Python3.12/` and the `linux_x86_64` wheels
+Linux (using the `linux_x86_64` wheels)
 ```bash
 cd ~/path/to/your/ComfyUI/custom_nodes/ComfyUI-Trellis2-AMD
 pip install \
@@ -168,7 +170,7 @@ Use my own ROCm version of FlexGEMM here: https://github.com/dmonkman/FlexGEMM-R
 ### *natten (only used for TencentARC/Pixal3D-T model): https://github.com/SHI-Labs/NATTEN
 > ⚠️ **Not tested on AMD**
 
-Windows and Linux
+You can also use pip on both Windows and Linux:
 ```bash
 pip install natten
 ```
@@ -184,7 +186,11 @@ Windows and Linux
 pip install -r requirements.txt
 ```
 
-Ensure that all of the requirements are installed. At this point the TRELLIS.2 backend dependencies (o_voxel, CuMesh, FlexGEMM, and nvdiffrast) are installed and GPU-accelerated on AMD. You should be able to follow most CUDA written guides from this point, but ensure you don't overwrite the custom dependencies (ex. torch).
+Ensure that all of the requirements are installed. At this point the TRELLIS.2 backend dependencies (including o_voxel, CuMesh, FlexGEMM, and nvdiffrast) are installed and GPU-accelerated on AMD. 
+
+Ensure to move the included workflows into `ComfyUI\user\default\workflows` and try a workflow. The first run of a Trellis2 workflow will take a while as it will automatically download any missing models. 
+
+🎉 You now have TRELLIS.2 working on your AMD system 🎉
 
 
 ### Note: Why I Included Aule Attention
