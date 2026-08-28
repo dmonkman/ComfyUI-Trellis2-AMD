@@ -1,4 +1,4 @@
-# 🌀 ComfyUI Wrapper for [https://github.com/microsoft/TRELLIS.2](https://github.com/microsoft/TRELLIS.2)
+# 🔴 ComfyUI Wrapper for [TRELLIS.2](https://github.com/microsoft/TRELLIS.2) using ROCm backend; Full AMD support
 
 ---
 
@@ -6,164 +6,192 @@
 
 ---
 
-<img width="980" height="579" alt="{F6FE6B7B-94B7-44C6-8C89-02E7C81EBF7E}" src="https://github.com/user-attachments/assets/ad27111c-beb8-48ef-8613-c533a3a5cacd" />
-
----
 
 ## 📋 Changelog
 
 | Date | Description |
 | --- | --- |
-| **2026-07-31** | Added new nodes "Smooth Mesh with PyMeshlab" and "Smooth Trimesh with PyMeshlab" |
-| **2026-06-02** | Added new node "Render MultiView (Nvdiffrast)"<br>Thanks GiusTex |
-| **2026-05-26** | Added new nodes used for the projection<br>Check the example Projection_Blender_Qwen_XViews |
-| **2026-05-22** | Added FOV Custom MoGe Camera node |
-| **2026-05-20** | Fixed Pixal3D<br>The node "Mesh with Voxel Advanced Generator" is compatible with Pixal3D |
-| **2026-05-13** | Added support for Pixal3D-T model<br>It's not compatible with all nodes<br>Check in the folder example_workflows |
-| **2026-04-20** | Recreated all Workflows |
-| **2026-04-20** | Added node "Sparse MultiView Generator"<br>Added node "ImageCond MultiView Generator"<br>Added node "Shape MultiView Generator"<br>Added node "Shape Cascade MultiView Generator"<br>Added node "Tex Slat MultiView Generator" |
-| **2026-04-20** | Added node "Fill Holes Nicely with Meshlib"<br>Fixed DinoV3 Features Extractor |
-| **2026-04-06** | Added new "DINO-Lock" functionality<br>New fill_holes in Sparse Generator<br>Thanks to Easymode on Discord |
-| **2026-04-05** | Added node "Extract Images from Video"<br>Can be used with "Sparse Generator with ReconViaGen" |
-| **2026-04-04** | Added node "Sparse Generator with ReconViaGen" |
-| **2026-04-01** | Added node "Voxel to Mesh"<br>It replaces Remeshing to make watertight mesh |
-| **2026-03-21** | Added node "Projection HighPoly to LowPoly"<br>Added node "Render MultiView" |
-| **2026-03-17** | Added Inpainting Choice NS and TELEA |
-| **2026-03-14** | Added Experimental node "Projection MultiView Texturing"<br>Check in example_workflows folder |
-| **2026-03-08** | Updated CuMesh wheels for Torch 2.7, 2.8 and Linux<br>You can use the node "Fill Holes with Cumesh" |
-| **2026-03-07** | Added "Heun" sampler<br>Added the node "Mesh with Voxel Cascade Generator" |
-| **2026-03-05** | Added "RK4" and "RK5" samplers<br>Processing is much slower, so reduce the number of steps |
-| **2026-03-04** | Sparse Structure Resolution supported up to 128<br>Experimental for "cascade" pipelines only<br>Can increase the details |
-| **2026-02-27** | Added the Wheels for Windows Python 3.13, Torch 2.10.0, CUDA 13.1 |
-| **2026-02-26** | Added FP8 models<br>Added "sdpa" and "flash_attn_3" for the backend |
-| **2026-02-21** | Fixed "Vertical lines" bug |
-| **2026-02-17** | Disabled Triton Cache (trying to fix vertical lines bug)<br>Fixed "Weld Vertices"<br>Added "Reconstruct Mesh with Quad" node |
-| **2026-02-13** | Added the node "Weld Vertices"<br>Added the resolution 1536 for "Mesh Texturing" |
-| **2026-02-12** | Added the node "Mesh With Voxel Multi-View Generator" |
-|| Added the node "Mesh Texturing Multi-View" |
-|| Added new example workflows |
-| **2026-02-10** | Improved progress bar when filling holes with meshlib |
-| **2026-02-09** | Fixed "Mesh Texturing" node<br>"mesh_cluster_threshold_cone_half_angle_rad" was not used |
-| **2026-02-08** | Fixed "Fill Holes" node progress bar<br>Updated Cumesh package<br>Added "Remesh with Quad" node<br>Added "Batch Simplify Mesh and Export" node|
-| **2026-02-07** | Updated Cumesh package<br>Improved "Remesh" node when removing inner layer|
-| **2026-02-02** | Added node "Smooth Normals"<br>Useful for "Low Poly" mesh to remove the "blocky" aspect|
-|| Added "remove_background" parameter for "PreProcess Image" node<br>Using rembg package|
-| **2026-01-30** | Updated Cumesh, updated nodes, updated workflows|
-||PostProcess UnWrap and Rasterize : removed fill_holes_max_perimeter <br> using fill holes from Meshlib|
-||Remesh : added "remove_inner_faces" -> same algorithm as "Reconstruct Mesh"|
-||Mesh Texturing: added "mesh_cluster_threshold_cone_half_angle_rad"|
-| **2026-01-29** |Updated cumesh -> Remesh and Reconstruct made by chunk|
-| **2026-01-28** |Added the node "Fill Holes With Meshlib"|
-||Trying to fix caching issue|
-| **2026-01-27** |Added the node "Trellis2ReconstructMesh"|
-||"Multiple Images" support for "Mesh Refiner" node|
-| **2026-01-21** |Added a "Continue" node|
-||Added the option "bake_on_vertices" for "Mesh Texturing" node|
-||Added "padding" option for "Preprocess Image" node|
-| **2026-01-20** |Added node "Simplify Trimesh"|
-||Fixed crash with "remove_infinite_vertices" in "PostProcess Mesh" node|
-||Fixed texture generation|
-| **2026-01-19** |Updated Cumesh|
-| **2026-01-12** |Can pass multiple images to "Mesh Texturing" node (experimental)|
-||Applied latest fixes from Microsoft|
-| **2026-01-05** |Implemented "Tiled" Decoder|
-||Updated Cumesh and O_voxel|
-
+| **2026-08-26** | Added support for AMD hardware via ROCm.<br>Added AuleAttention as alternative for systems that don't support FlashAttention.|
+| **2026-08-22** | Fork created. See [visualbruno/ComfyUI-Trellis2](https://github.com/visualbruno/ComfyUI-Trellis2) for prior updates and fork divergences.|
 ---
 
-## REQUIREMENTS ##
+## Hardware support
 
-You need to have access to facebook dinov3 models in order to use Trellis.2
+Validated end-to-end on a **Radeon RX 6800 XT (`gfx1030`, RDNA2)**, Windows 11 and Ubuntu 24.04 (**22.04 will not work**), Python 3.12, ROCm 10.0.0, PyTorch 2.13. The wheels are fat multi-arch builds covering RDNA1-4 (and gfx1250), so they should load on any of the cards below, but only `gfx1030` is tested here.
 
-[https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m](https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m)
+| Family | Example cards | gfx targets |
+| --- | --- | --- |
+| RDNA1 | RX 5500-5700 XT | gfx1010-gfx1012 |
+| RDNA2 | RX 6400-6950 XT | gfx1030-gfx1036 |
+| RDNA3 | RX 7600-7900 XTX, Ryzen APUs | gfx1100-gfx1103, gfx1150-gfx1153 |
+| RDNA4 | RX 9060-9070 XT | gfx1200, gfx1201 |
 
-Clone the repository in ComfyUI models folder under "facebook/dinov3-vitl16-pretrain-lvd1689m"
+If a card here is listed as working, that means its `gfx` target is in the build and ROCm sanity-tests it. It does not mean this pipeline is validated on it. Check your card against [TheRock/SUPPORTED_GPUS.md](https://github.com/ROCm/TheRock/blob/main/SUPPORTED_GPUS.md).
 
-So in ComfyUI/models/facebook/dinov3-vitl16-pretrain-lvd1689m
+## Requirements
 
-To use **TencentARC/Pixal3D-T** model, it's required to install **natten** package : https://github.com/SHI-Labs/NATTEN
-
+- Access to facebook dinov3 models in order to use Trellis.2
+    - Clone [the dinov3-vitl16-pretrain-lvd1689m repository](https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m) from HuggingFace into the ComfyUI models folder under "facebook/dinov3-vitl16-pretrain-lvd1689m"
+- To use **TencentARC/Pixal3D-T** model, it's required to install **natten** package : https://github.com/SHI-Labs/NATTEN
+- An **AMD Radeon GPU** whose `gfx` target is supported by ROCm 10.0 (see above).
+- **Python 3.12** with a recent pip.
+  - Python 3.13+ currently fails at runtime on Windows (ecosystem gaps, e.g. `open3d`). 3.12 recommended.
+- The **ROCm 10.0 PyTorch** stack, installed via pip in Step 2 below.
 ---
 
 ## ⚙️ Installation Guide
 
-> Tested on **Windows 11** with **Python 3.12** and **Torch = 2.12.0 + cu128**.
+> Tested on **Windows 11 / Ubuntu 24.04** with **Python 3.12 + Torch 2.13.0 + ROCm 10.0**.
 
-### 1. Install Wheels
+## Step 1: Fresh virtual environment
 
-#### For a standard python environment:
+Install into a clean Python 3.12 venv to avoid clashing with any existing PyTorch/CUDA packages, which can silently break the ROCm install. 
 
-**If you use Torch v2.12.0:**
-```bash
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/cumesh-1.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/nvdiffrec_render-0.0.0-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/flex_gemm-0.0.1-cp311-cp311-win_amd64.whl
-python -m pip install ComfyUI/custom_nodes/ComfyUI-Trellis2/wheels/Windows/Torch270/o_voxel-0.0.1-cp311-cp311-win_amd64.whl
+```powershell
+py -3.12 -m venv venv
+.\venv\Scripts\Activate.ps1
+python --version
 ```
 
----
+On Linux:
 
-#### For ComfyUI Portable:
-
-**If you use Torch v2.12.0:**
 ```bash
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\cumesh-1.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\nvdiffrast-0.4.0-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\flex_gemm-0.0.1-cp311-cp311-win_amd64.whl
-python_embeded\python.exe -m pip install ComfyUI\custom_nodes\ComfyUI-Trellis2\wheels\Windows\Torch270\o_voxel-0.0.1-cp311-cp311-win_amd64.whl
+python3.12 -m venv venv
+source venv/bin/activate
+python --version
 ```
 
+## Step 2: Install the ROCm 10.0 PyTorch stack
+
+One pip command pulls the pinned stable wheels from AMD's index. `device-all` covers every supported GPU. Swap it for your specific arch (e.g. `device-gfx1030`) for a smaller download.
+
+Windows:
+```powershell
+pip install --extra-index-url https://stable.repo.amd.com/rocm/whl-next/ `
+  "torch[device-gfx1030]==2.13.0+rocm10.0.0" `
+  "torchvision[device-gfx1030]==0.28.0+rocm10.0.0" `
+  "torchaudio==2.11.0.2+rocm10.0.0" `
+  "rocm[libraries,device-gfx1030]==10.0.0"
+```
+
+Linux:
+```bash
+pip install --extra-index-url https://stable.repo.amd.com/rocm/whl-next/ \
+  "torch[device-gfx1030]==2.13.0+rocm10.0.0" \
+  "torchvision[device-gfx1030]==0.28.0+rocm10.0.0" \
+  "torchaudio==2.11.0.2+rocm10.0.0" \
+  "rocm[libraries,device-gfx1030]==10.0.0"
+```
+
+
+### Verify Installations
+
+Windows
+```powershell
+pip list | Select-String "torch|rocm"
+```
+
+Linux
+```bash
+pip list | grep "rocm"
+```
+
+Every package should share the `10.0.0` version:
+
+```
+amd-torch-device-gfx1030       2.13.0+rocm10.0.0
+amd-torchvision-device-gfx1030 0.28.0+rocm10.0.0
+rocm                           10.0.0
+rocm-sdk-core                  10.0.0
+rocm-sdk-devel                 10.0.0   # runtime shouldn't need this
+rocm-sdk-device-gfx1030        10.0.0
+rocm-sdk-libraries             10.0.0
+torch                          2.13.0+rocm10.0.0
+torchaudio                     2.11.0.2+rocm10.0.0
+torchvision                    0.28.0+rocm10.0.0
+```
+
+Confirm torch sees the GPU:
+
+```powershell
+python -c "import torch; print(torch.__version__, torch.version.hip, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+```
+
+`torch.cuda.is_available()` should be `True` and the device name your card, e.g.:
+
+```
+2.13.0+rocm10.0.0 10.0.xxxxx True AMD Radeon RX 6800 XT
+```
+
+### Step 3. Install Custom Wheels
+
+Windows
+```powershell
+cd C:\path\to\your\ComfyUI\custom_nodes\ComfyUI-Trellis2-AMD
+pip install `
+  ".\wheels\Windows\Python3.12\cumesh-1.0+rocm10.0-cp312-cp312-win_amd64.whl" `
+  ".\wheels\Windows\Python3.12\flex_gemm-1.0.0+rocm10.0-cp312-cp312-win_amd64.whl" `
+  ".\wheels\Windows\Python3.12\o_voxel-0.0.1+rocm.10.0-cp312-cp312-win_amd64.whl" `
+  ".\wheels\Windows\Python3.12\nvdiffrast-0.4.0+rocm10.0-cp312-cp312-win_amd64.whl"
+```
+
+On Linux, use `wheels/Linux/Python3.12/` and the `linux_x86_64` wheels
+```bash
+cd ~/path/to/your/ComfyUI/custom_nodes/ComfyUI-Trellis2-AMD
+pip install \
+  ./wheels/Linux/Python3.12/cumesh-1.0+rocm10.0-cp312-cp312-linux_x86_64.whl   \
+  ./wheels/Linux/Python3.12/flex_gemm-1.0.0+rocm10.0-cp312-cp312-linux_x86_64.whl \
+  ./wheels/Linux/Python3.12/o_voxel-0.0.1+rocm.10.0-cp312-cp312-linux_x86_64.whl  \
+  ./wheels/Linux/Python3.12/nvdiffrast-0.4.0+rocm10.0-cp312-cp312-linux_x86_64.whl 
+```
 ---
 
-**Check the folder wheels for the other versions**
+**Check the folder wheels for the other versions if you want to try Python 3.13 or 3.14.**
 
 ---
 
-### 2. Custom Build
+<details>
+<summary><strong>Alternative: Custom Build the wheels</strong></summary>
 
 #### o_voxel
 
-Use my own ROCm version of Trellis.2 here: https://github.com/dmonkman/TRELLIS.2
+Use my own ROCm version of Trellis.2 here: https://github.com/dmonkman/TRELLIS.2-ROCm
 
 #### Cumesh 
 
-Use my own ROCm version of Cumesh here: https://github.com/dmonkman/CuMesh
+Use my own ROCm version of Cumesh here: https://github.com/dmonkman/CuMesh-ROCm
 
 ### FlexGEMM
 
-Use my own ROCm version of FlexGEMM here: https://github.com/dmonkman/FlexGEMM
+Use my own ROCm version of FlexGEMM here: https://github.com/dmonkman/FlexGEMM-ROCm
 
-### natten (only used for TencentARC/Pixal3D-T model)
+### natten (only used for TencentARC/Pixal3D-T model) 
+> ⚠️ **I didn't try or port this on AMD, may need a ROCm port**
 
 https://github.com/SHI-Labs/NATTEN
 
----
-
-### 3. Requirements.txt
-
-#### For a standard python environment:
-
-```bash
-python -m pip install -r ComfyUI/custom_nodes/ComfyUI-Trellis2/requirements.txt
-```
+</details>
 
 ---
 
-#### For ComfyUI Portable:
+## Step 4: Install requirements.txt
 
+Windows and Linux
 ```bash
-python_embeded\python.exe -m pip install -r ComfyUI\custom_nodes\ComfyUI-Trellis2\requirements.txt
+pip install -r requirements.txt
 ```
+
+Ensure that all of the requirements are installed. At this point the TRELLIS.2 backend dependencies (o_voxel, CuMesh, FlexGEMM, and nvdiffrast) are installed and GPU-accelerated on AMD. You should be able to follow most CUDA written guides from this point, but ensure you don't overwrite the custom dependencies (ex. torch).
+
 
 ### Note: Why I Included Aule Attention
 
 This provides users with hardware that doesn't support flash attention, have no matrix cores, and/or have low VRAM.
-SDPA (the default) is faster while it fits in VRAM, but its memory grows quadratically and collapses once it runs out of memory. These benchmarks 
-demonstrae the results on an RX 6800 XT 16GB:
+SDPA (the default) is faster while it fits in VRAM, but its memory usage grows quadratically and performances collapses 
+once it runs out of memory. These benchmarks demonstrate the results on an RX 6800 XT 16GB:
 
 ```
-# Causal workloads include Stable Diffusion, Video Diffusion, Image-to-3D, Upscalers, ControlNet, Encoders
+# Non-causal workloads include Stable Diffusion, Video Diffusion, Image-to-3D, Upscalers, ControlNet, Encoders
 --- Performance Benchmark (Causal = False) ---
 Performance Benchmark Aule (B=1, H=32, D=128)
 ==================================================
@@ -185,12 +213,12 @@ Seq Len      Time (ms)    Peak Memory (MB) TFLOPS
 4096         58.44        5282.86      4.7         
 8192         3080.63      20147.60     0.4         
 ==================================================
-NOTE: For standard ComfyUI, cross-attention is much better than SDPA
+NOTE: For standard ComfyUI diffusion workloads, cross-attention is much better than SDPA
 ```
 
-But that is worst case. **For causal workloads (LLMs, autoregressive image/video generators), there is no performance penalty. Aule was strictly better than SDPA.**
+But that is worst case. **For causal workloads (LLMs, autoregressive image/video generators), there is little to no performance penalty. For larger sequences, Aule was much better than SDPA.**
 ```
-# Non-Causal workloads include LLMs and autoregressive video/audio models
+# Causal workloads include LLMs and autoregressive video/audio models
 --- Performance Benchmark (Causal = True) ---
 Performance Benchmark Aule (B=1, H=32, D=128)
 ==================================================
@@ -216,6 +244,11 @@ Seq Len      Time (ms)    Peak Memory (MB) TFLOPS
 
 ## 🙏 Acknowledgements
 
-Discord community
+This package builds upon and integrates code from several excellent open-source libraries. We would like to express our gratitude to the authors of:
 
-"Blackwell Fix" from https://github.com/ThatButters/trellis2-blackwell-fix
+*   **[cubvh](https://github.com/ashawkey/cubvh)**: For the high-performance CUDA BVH acceleration toolkit.
+*   **[xatlas](https://github.com/jpcy/xatlas)**: For the robust UV parameterization and atlas packing library.
+*   **[Eigen](https://eigen.tuxfamily.org/)**: For the C++ template library for linear algebra, used by the cubvh backend.
+*   **[pamo](https://github.com/SarahWeiii/pamo)**: For the reference implementation of the GPU parallel edge collapse algorithm used in our mesh
+*   **[visualbruno/ComfyUI-Trellis2](https://github.com/visualbruno/ComfyUI-Trellis2)** and [Microsoft TRELLIS.2](https://github.com/microsoft/TRELLIS.2), the upstream wrapper and model this builds on.
+*   The "Blackwell Fix" from [ThatButters/trellis2-blackwell-fix](https://github.com/ThatButters/trellis2-blackwell-fix)
