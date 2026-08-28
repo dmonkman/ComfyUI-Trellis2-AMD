@@ -47,14 +47,14 @@ If a card here is listed as working, that means its `gfx` target is in the build
 
 Install into a clean Python 3.12 venv to avoid clashing with any existing PyTorch/CUDA packages, which can silently break the ROCm install. 
 
+Windows
 ```powershell
 py -3.12 -m venv venv
 .\venv\Scripts\Activate.ps1
 python --version
 ```
 
-On Linux:
-
+Linux
 ```bash
 python3.12 -m venv venv
 source venv/bin/activate
@@ -65,7 +65,7 @@ python --version
 
 One pip command pulls the pinned stable wheels from AMD's index. `device-all` covers every supported GPU. Swap it for your specific arch (e.g. `device-gfx1030`) for a smaller download.
 
-Windows:
+Windows
 ```powershell
 pip install --extra-index-url https://stable.repo.amd.com/rocm/whl-next/ `
   "torch[device-gfx1030]==2.13.0+rocm10.0.0" `
@@ -74,7 +74,7 @@ pip install --extra-index-url https://stable.repo.amd.com/rocm/whl-next/ `
   "rocm[libraries,device-gfx1030]==10.0.0"
 ```
 
-Linux:
+Linux
 ```bash
 pip install --extra-index-url https://stable.repo.amd.com/rocm/whl-next/ \
   "torch[device-gfx1030]==2.13.0+rocm10.0.0" \
