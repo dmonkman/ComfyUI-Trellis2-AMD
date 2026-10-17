@@ -7596,5 +7596,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Trellis2SmoothTrimeshWithPyMeshlab": "Trellis2 - Smooth Trimesh With PyMeshlab",
     }
 
-from .trellis2_profiler import NODE_CLASS_MAPPINGS as _P_MAP, NODE_DISPLAY_NAME_MAPPINGS as _P_DMAP
-NODE_CLASS_MAPPINGS.update(_P_MAP); NODE_DISPLAY_NAME_MAPPINGS.update(_P_DMAP)
+try:  # trellis2_profiler.py is not in the published repo; the profiler nodes are optional
+    from .trellis2_profiler import NODE_CLASS_MAPPINGS as _P_MAP, NODE_DISPLAY_NAME_MAPPINGS as _P_DMAP
+    NODE_CLASS_MAPPINGS.update(_P_MAP); NODE_DISPLAY_NAME_MAPPINGS.update(_P_DMAP)
+except ImportError:
+    pass
